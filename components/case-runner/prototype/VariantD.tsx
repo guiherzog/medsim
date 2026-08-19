@@ -1,7 +1,7 @@
 // PROTOTYPE — throwaway. See PROTOTYPE_README.md.
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Activity,
   AlertTriangle,
@@ -9,11 +9,12 @@ import {
   MoveDown,
   MoveUp,
   Minus,
-  PlayCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatClock, useSimEngine, type Trend } from "./useSimEngine";
 import { PrototypeDebrief } from "./PrototypeDebrief";
+import { PrototypeBriefing } from "./PrototypeBriefing";
+import { LogEntry } from "./LogEntry";
 import type { VitalKey } from "./prototypeCase";
 
 export const VARIANT_D_NAME = "Monitor + log (escolhido)";
@@ -45,9 +46,11 @@ function TrendIcon({ trend }: { trend: Trend }) {
  * line in the log — rather than implied by a subtle caption.
  */
 export function VariantD() {
+  const [started, setStarted] = useState(false);
   const {
     step,
     vitals,
+    remaining,
     trends,
     criticalVital,
     elapsed,
@@ -63,6 +66,10 @@ export function VariantD() {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [feed.length, awaitingDecision]);
+
+  if (!started) {
+    return <PrototypeBriefing onStart={() => setStarted(true)} />;
+  }
 
   if (finished) {
     return (
@@ -145,31 +152,7 @@ export function VariantD() {
         </div>
         <div className="flex flex-col gap-2">
           {feed.map((entry) => (
-            <div
-              key={entry.id}
-              className={cn(
-                "animate-in flex gap-2 rounded-xl border-l-[3px] bg-card px-3 py-2 text-sm leading-relaxed",
-                entry.kind === "event" && "border-l-sky font-medium",
-                entry.kind === "decision" && "border-l-primary bg-secondary",
-                entry.kind === "outcome" &&
-                  (entry.tone === "critical" ? "border-l-destructive" : "border-l-mint"),
-                entry.kind === "vitals" &&
-                  (entry.tone === "critical"
-                    ? "border-l-destructive bg-destructive/8 font-mono text-[13px] text-destructive"
-                    : "border-l-mint bg-mint/8 font-mono text-[13px] text-[#0d7f72]"),
-                entry.kind === "clip" && "border-l-violet",
-              )}
-            >
-              <span className="shrink-0 font-mono text-[10px] tabular-nums text-muted-foreground">
-                {formatClock(entry.at)}
-              </span>
-              <span className="flex-1">
-                {entry.kind === "clip" && (
-                  <PlayCircle className="mr-1 inline size-4 text-violet" />
-                )}
-                {entry.text}
-              </span>
-            </div>
+            <LogEntry key={entry.id} entry={entry} />
           ))}
           {!awaitingDecision && (
             <div className="flex items-center gap-2 px-3 py-1 font-mono text-[11px] tracking-[0.1em] text-muted-foreground">
@@ -184,7 +167,30 @@ export function VariantD() {
       <div className="shrink-0">
         {awaitingDecision ? (
           <div className="flex flex-col gap-2">
-            <p className="px-1 font-heading text-[15px] font-bold">{step.prompt}</p>
+            <div className="flex items-center justify-between gap-2 px-1">
+              <p className="font-heading text-[15px] font-bold">{step.prompt}</p>
+              <span
+                className={cn(
+                  "shrink-0 rounded-md px-2 py-0.5 font-mono text-sm tabular-nums",
+                  remaining <= 5
+                    ? "animate-pulse bg-destructive text-white"
+                    : remaining <= 10
+                      ? "bg-[#ff9d6b]/25 text-[#8a4b18]"
+                      : "bg-muted text-muted-foreground",
+                )}
+              >
+                {remaining}s
+              </span>
+            </div>
+            <div className="h-1 overflow-hidden rounded-full bg-muted">
+              <div
+                className={cn(
+                  "h-full transition-all duration-1000 ease-linear",
+                  remaining <= 5 ? "bg-destructive" : remaining <= 10 ? "bg-[#ff9d6b]" : "bg-sky",
+                )}
+                style={{ width: `${(remaining / step.decisionSeconds) * 100}%` }}
+              />
+            </div>
             {step.options.map((o) => (
               <button
                 key={o.id}

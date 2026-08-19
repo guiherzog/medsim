@@ -27,6 +27,37 @@ exam-style answer key.
 
 A/B/C stay reachable for comparison until D is folded in for real.
 
+## Round 3 — D confirmed, pressure and briefing added
+
+**Briefing first.** `PrototypeBriefing` is the mocks' pre-case page — category
+eyebrow + status badge, title, `⏱ meta` line, patient in a hatched-avatar card,
+admission vitals on the deep panel, and **"Assumir o caso"**. It deliberately
+does *not* hard-gate on a 2–3 min reflection timer the way the shipped case
+screen does (plan.md Q8): forcing a wait before an emergency works against the
+pressure this model runs on. Worth deciding explicitly when folding in.
+
+**Pressure has teeth.** Every step carries `decisionSeconds` (30s for the
+hypotension call, 12s for the VF) and an authored `timeout` consequence. The
+countdown pill and bar escalate muted → amber → pulsing red, and running out
+pushes a `timeout` entry, worsens the vitals and costs the decision — it is not
+a free pass. Timeouts are reported separately in the debrief.
+
+**Every entry kind has its own identity** (`LogEntry.tsx`): EVENTO (navy,
+siren), SUA CONDUTA (primary, stethoscope), RESPOSTA DO PACIENTE (mint, heart),
+VITAIS (mono numerals, activity), ALARME (red, bell), TEMPO ESGOTADO (amber,
+timer-off), MICROVÍDEO (violet, play). Each is an icon + uppercase mono chip +
+timestamp, so the log scans as a stream of different things happening.
+
+**The app raises alarms on its own.** `ALARM_RULES` trips a one-shot `alarm`
+entry when a reading crosses a threshold (PA sistólica < 70, no rhythm,
+SpO₂ < 88) — the monitor shouts without waiting for the candidate.
+
+Two bugs this round, both worth remembering for the real implementation:
+the timeout fired once per re-render until guarded by a per-step ref, and the
+countdown stalled because its effect listed `vitals` in the deps and was torn
+down each second before firing. One clock now drives elapsed, drift, alarms and
+the decision countdown.
+
 **Question it answers:** does a live vitals monitor + chat-style decision feed
 feel like an emergency simulation rather than an exam? The shipped run screen
 (no `?variant=`) shows all six options at once and asks the candidate to

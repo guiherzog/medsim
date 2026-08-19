@@ -6,8 +6,8 @@ import { DeepPanel } from "@/components/layout/DeepPanel";
 import { Eyebrow } from "@/components/layout/Eyebrow";
 import { OutcomeCallout } from "@/components/debrief/OutcomeCallout";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { formatClock, type FeedEntry, type SimScore } from "./useSimEngine";
+import { LogEntry } from "./LogEntry";
 
 /**
  * The mocks' "DEBRIEFING DO CASO": a score ring, what-went-well / critical
@@ -27,7 +27,7 @@ export function PrototypeDebrief({
   elapsed: number;
 }) {
   const pct = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
-  const survived = score.criticalErrors === 0;
+  const survived = score.criticalErrors === 0 && score.timeouts === 0;
 
   return (
     <div className="mx-auto flex w-full max-w-[560px] flex-col gap-4">
@@ -63,12 +63,19 @@ export function PrototypeDebrief({
       </OutcomeCallout>
 
       <OutcomeCallout
-        tone={score.criticalErrors > 0 ? "bad" : "good"}
+        tone={score.criticalErrors > 0 || score.timeouts > 0 ? "bad" : "good"}
         title="Ponto crítico de falha"
       >
-        {score.criticalErrors > 0
-          ? `${score.criticalErrors} erro(s) crítico(s) — decisões que pioraram diretamente o quadro do paciente.`
-          : "Nenhum erro crítico. Você evitou as armadilhas graves deste caso."}
+        {score.criticalErrors === 0 && score.timeouts === 0
+          ? "Nenhum erro crítico e nenhuma decisão perdida por tempo."
+          : [
+              score.criticalErrors > 0 &&
+                `${score.criticalErrors} erro(s) crítico(s) — decisões que pioraram diretamente o quadro.`,
+              score.timeouts > 0 &&
+                `${score.timeouts} decisão(ões) perdida(s) por tempo — a demora também tem consequência.`,
+            ]
+              .filter(Boolean)
+              .join(" ")}
       </OutcomeCallout>
 
       {clips.length > 0 && (
@@ -92,24 +99,7 @@ export function PrototypeDebrief({
         <Eyebrow className="text-muted-foreground">Como você conduziu</Eyebrow>
         <div className="flex flex-col gap-1.5 rounded-2xl bg-card/60 p-3 ring-1 ring-border">
           {feed.map((e) => (
-            <div
-              key={e.id}
-              className={cn(
-                "flex gap-2 rounded-lg border-l-[3px] bg-card px-3 py-2 text-sm",
-                e.kind === "event" && "border-l-sky font-medium",
-                e.kind === "decision" && "border-l-primary bg-secondary",
-                e.kind === "outcome" &&
-                  (e.tone === "critical" ? "border-l-destructive" : "border-l-mint"),
-                e.kind === "vitals" &&
-                  "border-l-muted font-mono text-[13px] text-muted-foreground",
-                e.kind === "clip" && "border-l-violet",
-              )}
-            >
-              <span className="shrink-0 font-mono text-[10px] tabular-nums text-muted-foreground">
-                {formatClock(e.at)}
-              </span>
-              <span className="flex-1">{e.text}</span>
-            </div>
+            <LogEntry key={e.id} entry={e} dim />
           ))}
         </div>
       </div>

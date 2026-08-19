@@ -35,8 +35,28 @@ export interface SimStep {
   prompt: string;
   vitals: SimVitals;
   criticalVital: VitalKey | null;
+  /** Seconds to decide before the patient deteriorates on its own. */
+  decisionSeconds: number;
+  /** Authored consequence of not acting in time — the pressure has teeth. */
+  timeout: {
+    feed: string;
+    target: SimVitals;
+    criticalVital: VitalKey | null;
+  };
   options: SimOption[];
 }
+
+/** The mocks' pre-case briefing ("Assumir o caso"). */
+export const PROTOTYPE_BRIEFING = {
+  category: "Cardiologia",
+  title: "Dor torácica em homem de 58 anos",
+  meta: "~4 min · difícil · IAM de parede inferior",
+  patient: "Homem, 58 anos",
+  patientDetail: "Hipertenso, tabagista (40 maços-ano) · dor há 40 min · supra de ST em DII, DIII, aVF",
+  admissionVitals: { pa: "130/80", fc: 62, spo2: 96, fr: 18 } as SimVitals,
+  note: "Você conduz em tempo real. Cada decisão altera os vitais — e a demora também.",
+  decisions: 3,
+};
 
 export const PROTOTYPE_STEPS: SimStep[] = [
   {
@@ -46,6 +66,12 @@ export const PROTOTYPE_STEPS: SimStep[] = [
     prompt: "PA em queda após o nitrato. Qual sua conduta agora?",
     vitals: { pa: "72/40", fc: 58, spo2: 92, fr: 22 },
     criticalVital: "pa",
+    decisionSeconds: 30,
+    timeout: {
+      feed: "Nenhuma conduta tomada. A hipotensão progride sem reposição de volume.",
+      target: { pa: "60/34", fc: 50, spo2: 87, fr: 27 },
+      criticalVital: "pa",
+    },
     options: [
       {
         id: "a1",
@@ -94,6 +120,12 @@ export const PROTOTYPE_STEPS: SimStep[] = [
     prompt: "Ritmo chocável, sem pulso. Próxima ação?",
     vitals: { pa: "0/0", fc: 0, spo2: 0, fr: 0 },
     criticalVital: "fc",
+    decisionSeconds: 12,
+    timeout: {
+      feed: "Nenhum choque entregue. Cada ciclo sem desfibrilação reduz a chance de retorno da circulação.",
+      target: { pa: "0/0", fc: 0, spo2: 0, fr: 0 },
+      criticalVital: "fc",
+    },
     options: [
       {
         id: "b1",
@@ -133,6 +165,12 @@ export const PROTOTYPE_STEPS: SimStep[] = [
     prompt: "Paciente estável no pós-procedimento. Conduta?",
     vitals: { pa: "118/76", fc: 74, spo2: 97, fr: 16 },
     criticalVital: null,
+    decisionSeconds: 45,
+    timeout: {
+      feed: "Nenhuma definição de conduta. O paciente segue sem plano de seguimento definido.",
+      target: { pa: "116/74", fc: 76, spo2: 96, fr: 17 },
+      criticalVital: null,
+    },
     options: [
       {
         id: "c1",
