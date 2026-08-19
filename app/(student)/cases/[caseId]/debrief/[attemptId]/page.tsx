@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/layout/AppHeader";
+import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
 import { buttonVariants } from "@/components/ui/button";
 import { ScoreSummary } from "@/components/debrief/ScoreSummary";
 import { EvolutionBreakdown } from "@/components/debrief/EvolutionBreakdown";
@@ -37,6 +38,7 @@ export default async function DebriefPage({
     <>
       <AppHeader />
       <main className="mx-auto flex max-w-2xl flex-col gap-6 p-6">
+        <DisclaimerBanner disclaimer={caseRow.disclaimer} />
         <ScoreSummary score={attempt.finalScore ?? 0} maxScore={attempt.maxPossibleScore ?? 0} />
         <EvolutionBreakdown evolutionScores={attempt.evolutionResults} />
         <div className="flex flex-col gap-4">
