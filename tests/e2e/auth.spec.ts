@@ -11,4 +11,8 @@ test("dev login lands on the authenticated shell", async ({ page }) => {
   await page.getByRole("button", { name: "Entrar como usuário de teste (dev)" }).click();
   await expect(page).toHaveURL(/\/cases$/);
   await expect(page.getByText("Casos disponíveis")).toBeVisible();
+
+  // plan.md verification checklist: every case is visibly marked under_review
+  // (status badge on the list), never silently presented as doctor-approved.
+  await expect(page.getByText("Em validação").first()).toBeVisible();
 });
