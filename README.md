@@ -2,6 +2,7 @@
 
 AI-assisted clinical case simulator for Brazilian medical students/residents. Cases are deterministic at runtime — no LLM drives narrative, vitals, or scoring live; AI may only assist drafting a case offline, and every case must carry a real doctor's `approval` before it's trustworthy (see `plan.md`'s Case Lifecycle Status).
 
+- **`HANDOFF.md`** — start here: current state, infrastructure, and the gotchas worth not re-deriving.
 - **`plan.md`** — the build plan: architecture decisions, case schema, data model, phased build order.
 - **`DESIGN_SYSTEM.md`** — component/UI conventions (shadcn/ui-based, `components/ui` → `components/{layout,case-runner,debrief}`).
 
