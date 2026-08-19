@@ -8,5 +8,51 @@
     "googleButton": "Entrar com Google",
     "devButton": "Entrar como usuário de teste (dev)",
     "error": "Não foi possível entrar. Tente novamente."
+  },
+  "status": {
+    "reviewed": "Revisado por especialista",
+    "under_review": "Em validação",
+    "draft": "Rascunho",
+    "disabled": "Desativado"
+  },
+  "cases": {
+    "title": "Casos disponíveis",
+    "empty": "Nenhum caso disponível no momento."
+  },
+  "caseDetail": {
+    "vitalsTitle": "Sinais vitais",
+    "pa": "PA",
+    "fc": "FC",
+    "spo2": "SpO2",
+    "initialConductLabel": "Antes de ver a evolução, registre sua conduta inicial:",
+    "initialConductPlaceholder": "O que você faria agora?",
+    "revealButton": "Ver evolução",
+    "waitingButton": "Aguarde {seconds}s..."
+  },
+  "evolution": {
+    "progress": "Evolução {current} de {total}",
+    "vitalsTitle": "Sinais vitais atualizados",
+    "optionsInstructions": "Para cada conduta abaixo, marque se ela é correta ou incorreta. Em seguida, indique qual seria a mais perigosa (erro crítico) se realizada.",
+    "correct": "Correta",
+    "incorrect": "Incorreta",
+    "mostDangerous": "Mais perigosa",
+    "submit": "Confirmar respostas",
+    "submitDisabledHint": "Classifique as 6 opções e marque a mais perigosa para confirmar.",
+    "scoreFeedback": "Você marcou {score} de {maxScore} pontos nesta evolução.",
+    "criticalIdentified": "Você identificou corretamente o erro crítico.",
+    "criticalMissed": "Você não identificou o erro crítico desta evolução.",
+    "next": "Próxima evolução",
+    "finish": "Ver resultado final"
+  },
+  "debrief": {
+    "title": "Resultado final",
+    "score": "{score} de {maxScore} pontos",
+    "evolutionBreakdown": "Detalhamento por evolução",
+    "criticalMisses": "Erros críticos não identificados",
+    "noCriticalMisses": "Você identificou todos os erros críticos.",
+    "rationaleTitle": "Revisão das condutas",
+    "criticalOptionLabel": "erro crítico",
+    "misclassifiedLabel": "classificação incorreta",
+    "backToCases": "Voltar para os casos"
   }
 }
