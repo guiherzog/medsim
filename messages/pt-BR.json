@@ -27,7 +27,12 @@
   },
   "cases": {
     "title": "Casos disponíveis",
-    "empty": "Nenhum caso disponível no momento."
+    "subtitle": "Escolha um caso e conduza em tempo real. Cada decisão altera o quadro do paciente.",
+    "empty": "Nenhum caso disponível no momento.",
+    "start": "Iniciar caso",
+    "countOne": "1 caso",
+    "countOther": "{count} casos",
+    "categories": "{count} especialidades"
   },
   "caseDetail": {
     "takeCase": "Assumir o caso",

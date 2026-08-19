@@ -23,7 +23,7 @@ components/
 │   ├── ProtocolReferences.tsx    # home-page selling point: the reference protocols behind the cases
 │   └── StatusBadge.tsx           # case.status -> label + color (under_review/reviewed/draft/disabled)
 ├── case-runner/   # feature components for the case-play flow, composed from ui/
-│   ├── CaseCard.tsx              # one card on the case-list screen
+│   ├── CaseCard.tsx              # one card on the case-list screen; `featured` = larger first card
 │   ├── CaseIntro.tsx             # the briefing: patient card, admission vitals, "Assumir o caso"
 │   ├── CaseRunner.tsx            # the run screen: monitor + activity log + decisions (client)
 │   ├── Monitor.tsx               # bedside monitor; near-black + ring + shake when dying
@@ -83,6 +83,8 @@ Taken from the MedSim design mocks (the "MedSim AI data briefing" artifact), def
 **Case-screen patterns** (Phase 2): a briefing leads with a mono eyebrow (category) + status badge, then a 28px display title, the patient in a hatched-avatar card and admission vitals on the deep navy panel. The run screen pins `Monitor` at the top, scrolls the activity log in the middle, and docks the decisions — each with a countdown that escalates grey → amber → pulsing red. The debrief pairs the score ring with the two `OutcomeCallout`s and replays the run with each decision's rationale.
 
 **Severity is a system, not a one-off.** `lib/engine/vitalStatus.ts` owns the reference bands; `VitalTile` renders `normal` / `warning` / `critical` with its own colour, chip, delta-from-admission and band. A patient state of `dying` escalates the whole screen (red ring, shake, banner, edge vignette, log dimmed) — but the monitor panel stays near-black, because tinting it red flattens the per-vital severity colours that make the readings legible.
+
+**The case list groups by specialty.** Section headers own the category, so cards don't repeat it. Each card carries the status badge, title, patient one-liner, the meta line (duration · difficulty · condition) and an explicit "Iniciar caso" affordance; the first card gets the mocks' larger `featured` treatment. `listPlayableCases` projects just the two briefing fields the cards need (`case_spec->briefing->>meta`, `->>patientDetail`) rather than selecting `case_spec` — the list has no business shipping every case's answer key. The mocks' `GRÁTIS HOJE` / `PRO 🔒` chips and the "recommended for your gaps" rail are deliberately absent: both belong to the paywall and the gap-analysis dashboard, which `plan.md` puts out of scope.
 
 **Log entries are typed.** Each kind (`event`, `decision`, `outcome`, `vitals`, `alarm`, `timeout`, `clip`) gets its own icon, uppercase mono chip and treatment in `LogEntry`, so the log scans as a stream of different things happening.
 
