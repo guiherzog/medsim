@@ -20,7 +20,7 @@ export function OptionRow({
   const t = useTranslations("evolution");
 
   return (
-    <Card>
+    <Card data-testid={`option-${option.id}`}>
       <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="flex-1 text-sm">{option.text}</p>
         <div className="flex items-center gap-2">

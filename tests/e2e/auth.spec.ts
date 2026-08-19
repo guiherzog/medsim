@@ -10,5 +10,5 @@ test("dev login lands on the authenticated shell", async ({ page }) => {
   await page.goto("/login");
   await page.getByRole("button", { name: "Entrar como usuário de teste (dev)" }).click();
   await expect(page).toHaveURL(/\/cases$/);
-  await expect(page.getByText("dev@medsim.local")).toBeVisible();
+  await expect(page.getByText("Casos disponíveis")).toBeVisible();
 });

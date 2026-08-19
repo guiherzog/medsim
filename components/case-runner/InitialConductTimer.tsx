@@ -25,10 +25,17 @@ export function InitialConductTimer({
   const [text, setText] = useState("");
 
   useEffect(() => {
-    if (remaining <= 0) return;
-    const id = setInterval(() => setRemaining((r) => Math.max(0, r - 1)), 1000);
+    const id = setInterval(() => {
+      setRemaining((r) => {
+        if (r <= 1) {
+          clearInterval(id);
+          return 0;
+        }
+        return r - 1;
+      });
+    }, 1000);
     return () => clearInterval(id);
-  }, [remaining]);
+  }, []);
 
   return (
     <div className="flex flex-col gap-3">
