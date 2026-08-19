@@ -10,11 +10,15 @@ import { getCaseById } from "@/lib/db/queries/cases";
 import { getAttempt } from "@/lib/db/queries/attempts";
 import { shuffleOptions } from "@/lib/engine/shuffle";
 import { requireUser } from "@/lib/auth/session";
+import { isNonProductionDeployment } from "@/lib/env";
+import { PrototypeRun } from "@/components/case-runner/prototype/PrototypeRun";
 
 export default async function CaseRunPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ caseId: string; attemptId: string }>;
+  searchParams: Promise<{ variant?: string }>;
 }) {
   const user = await requireUser();
   const { caseId: slug, attemptId } = await params;
@@ -36,6 +40,21 @@ export default async function CaseRunPage({
   if (!evolution) notFound();
 
   const options = shuffleOptions(evolution, attemptId).map((o) => ({ id: o.id, text: o.text }));
+
+  // PROTOTYPE escape hatch: ?variant=A|B|C renders the throwaway real-time sim
+  // variants instead of the shipped screen. Non-production only; without the
+  // param nothing changes, so the existing tests exercise the real UI.
+  const { variant } = await searchParams;
+  if (variant && isNonProductionDeployment()) {
+    return (
+      <>
+        <AppHeader />
+        <main className="px-6 pb-16 pt-2">
+          <PrototypeRun variant={variant} />
+        </main>
+      </>
+    );
+  }
 
   return (
     <>
