@@ -53,6 +53,8 @@ If a piece of markup appears a second time, or carries semantic meaning (a statu
 
 Taken from the MedSim design mocks (the "MedSim AI data briefing" artifact), defined in `app/globals.css`.
 
+> **The mocks cover more product than this app builds, on purpose.** They also show onboarding (career stage, focus area), a dashboard with a readiness index, per-category mastery, gap analysis and streaks. Those are out of scope per `plan.md`'s "Explicitly not in this pass" — the mocks are the source for the *visual language*, not a checklist of screens to build. Don't treat their absence as a gap.
+
 **Type** — three faces, loaded via `next/font/google` in `app/layout.tsx`:
 
 | Role | Family | Tailwind |
