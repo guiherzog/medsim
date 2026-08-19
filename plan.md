@@ -224,3 +224,74 @@ Supabase project `medsim` (`sa-east-1`, org Herzog, ref `eirukxgswpzuppcstlzw`) 
 - Confirm the home page shows the reference-protocol selling point, and that unreviewed cases are still badged "Em validação" on the case list.
 - Confirm "Sign in with Google" completes the OAuth round trip and lands on the authenticated shell.
 - Confirm the initial-conduct reveal button stays disabled until the timer elapses, and the free-text answer is saved to `case_attempts.initial_conduct_text`.
+
+
+---
+
+# Phase 2 — Real-time decision simulation (supersedes the Phase 1 case format)
+
+Phase 1 shipped an *exam*: six conducts per evolution, each classified
+correct/incorrect, plus a most-dangerous pick. Playing it made the problem
+obvious — classifying six statements is a rubric, not an emergency. The design
+mocks describe something else: a live monitor, one decision at a time under a
+clock, and a running log of what you did and how the patient answered.
+
+Validated with a throwaway UI prototype (branch `prototype/realtime-sim`, four
+rounds). Chosen shape: **monitor pinned at the top, scrollable timestamped
+activity log in the middle, decisions docked at the bottom.**
+
+Still deterministic — no LLM at runtime. Every option carries authored
+consequences; the "live" feel comes from an easing drift toward an authored
+target plus an elapsed clock, so a given sequence of decisions always replays
+identically and stays unit-testable.
+
+## Decisions
+
+- **Case format**: `steps[]`, each one event → prompt → single-choice options.
+  Each option authors its own consequence: `feed` (what the patient does),
+  `target` vitals, the next `criticalVital`, and `next` step. Replaces
+  `evolutions[]` with its six classify-options.
+- **Time pressure**: every step carries `decisionSeconds` and an authored
+  `timeout` consequence. Running out worsens the vitals and costs the decision —
+  it is not a free pass.
+- **Scoring — weighted points** (retires the 8-per-evolution / 72-point rubric):
+  `pointsPerCorrectDecision` awarded per correct decision, minus
+  `criticalErrorPenalty` per critical error and `timeoutPenalty` per expired
+  clock, floored at 0. `maxScore` = decisions × `pointsPerCorrectDecision`.
+- **The reflection gate is dropped** (reverses Q8). The briefing goes straight to
+  "Assumir o caso"; forcing a 2–3 min wait works against the pressure the model
+  runs on. `case_attempts.initial_conduct_text` becomes unused — kept in the
+  schema rather than dropped, so existing rows stay readable.
+- **Full step goes to the client**, including each option's consequences, so the
+  UI can react instantly. This *does* put the answer key in the page payload —
+  readable in devtools — which was an accepted trade for latency. Mitigation:
+  **scoring stays server-authoritative.** The submit endpoint rescores from the
+  DB's own `case_spec`, so a peeked key lets someone see the answers but never
+  forge a score.
+- **Vitals legibility**: severity per reading is derived from adult reference
+  bands (`normal` / `warning` / `critical`), and the UI shows the band and the
+  delta from admission on every tile. A patient state of `dying` (arrest,
+  systolic < 70, or SpO₂ < 85) escalates the whole screen.
+
+## What this replaces
+
+- `lib/engine/scoreEvolution.ts`, `scoreAttempt.ts` and their tests → a single
+  pure `scoreRun`, plus pure `vitalStatus` and `drift` helpers, all tested.
+- `content/cases/*.yaml` — all three cases re-authored into `steps[]` with
+  authored consequences. They remain AI-drafted and `under_review`.
+- `case_attempts.evolution_results` → `decisions` (migration 0004).
+- The classify-six-options run screen and the answer-key debrief table → monitor
+  + activity log, and a debrief built on the run's own timeline.
+
+*Done when*: a logged-in user opens a case briefing, takes it, drives all steps
+under a live clock with vitals that respond to each decision (and to running out
+of time), and reaches a debrief showing points, critical errors, timeouts and the
+full timestamped run — with the same decisions always producing the same score.
+
+## Verification
+
+- `pnpm test` — pure-function tests for `scoreRun` (all-correct, all-wrong,
+  critical errors, timeouts, floor at 0), severity bands, patient state, drift
+  determinism, and every case YAML validating against the new schema.
+- `pnpm test:e2e` — briefing → take case → decide under the clock → let a clock
+  expire → debrief, asserting the timeout is penalised and reported.
