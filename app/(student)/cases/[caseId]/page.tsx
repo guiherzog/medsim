@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
-import { AppHeader } from "@/components/layout/AppHeader";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { AppShell } from "@/components/layout/AppShell";
 import { Eyebrow } from "@/components/layout/Eyebrow";
 import { StatusBadge } from "@/components/layout/StatusBadge";
@@ -12,15 +14,22 @@ import { requireUser } from "@/lib/auth/session";
 export default async function CaseDetailPage({ params }: { params: Promise<{ caseId: string }> }) {
   await requireUser();
   const { caseId: slug } = await params;
+  const t = await getTranslations("cases");
   const supabase = await createClient();
   const caseRow = await getPlayableCaseBySlug(supabase, slug);
   if (!caseRow) notFound();
 
   return (
     <>
-      <AppHeader />
-      <main>
+      <main className="pt-4">
         <AppShell>
+          <Link
+            href="/cases"
+            className="flex w-fit items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ArrowLeft className="size-4" />
+            {t("back")}
+          </Link>
           <div>
             <div className="flex items-center gap-2">
               <Eyebrow className="text-muted-foreground">{caseRow.category}</Eyebrow>

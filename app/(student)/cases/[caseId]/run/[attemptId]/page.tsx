@@ -1,5 +1,4 @@
 import { notFound, redirect } from "next/navigation";
-import { AppHeader } from "@/components/layout/AppHeader";
 import { CaseRunner } from "@/components/case-runner/CaseRunner";
 import { createClient } from "@/lib/db/client";
 import { getCaseById } from "@/lib/db/queries/cases";
@@ -29,11 +28,8 @@ export default async function CaseRunPage({
   // the monitor can react instantly — an accepted trade, see plan.md Phase 2.
   // Scoring is still recomputed server-side on every decision.
   return (
-    <>
-      <AppHeader />
-      <main className="px-4 pb-3 sm:px-6 sm:pb-6">
-        <CaseRunner caseSpec={caseRow.caseSpec} attemptId={attemptId} caseSlug={slug} />
-      </main>
-    </>
+    <main className="px-4 pt-3 pb-3 sm:px-6 sm:pb-6">
+      <CaseRunner caseSpec={caseRow.caseSpec} attemptId={attemptId} caseSlug={slug} />
+    </main>
   );
 }

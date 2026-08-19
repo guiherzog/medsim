@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { describeChange, driftVitals } from "@/lib/engine/drift";
+import { describeChange, driftVitals, vitalChanges, type VitalChange } from "@/lib/engine/drift";
 import { ALARM_RULES, patientStateOf } from "@/lib/engine/vitalStatus";
 import type {
   CaseSpec,
@@ -24,8 +24,10 @@ export type LogKind =
 export interface LogItem {
   id: number;
   kind: LogKind;
-  text: string
+  text: string;
   tone?: "good" | "bad" | "critical";
+  /** Set on "vitals" entries so each reading can show its own signed delta. */
+  changes?: VitalChange[];
   at: number;
 }
 
@@ -121,8 +123,18 @@ export function useRun({ caseSpec, attemptId }: { caseSpec: CaseSpec; attemptId:
   const applyConsequence = useCallback(
     (consequence: Consequence, at: number, tone: LogItem["tone"]) => {
       push({ kind: "outcome", text: consequence.feed, tone }, at);
-      const change = describeChange(vitalsRef.current, consequence.target);
-      if (change) push({ kind: "vitals", text: change, tone }, at);
+      const changes = vitalChanges(vitalsRef.current, consequence.target);
+      if (changes.length > 0) {
+        push(
+          {
+            kind: "vitals",
+            text: describeChange(vitalsRef.current, consequence.target),
+            tone,
+            changes,
+          },
+          at,
+        );
+      }
       setTarget(consequence.target);
       setCriticalVital(consequence.criticalVital);
     },

@@ -32,7 +32,8 @@
     "start": "Iniciar caso",
     "countOne": "1 caso",
     "countOther": "{count} casos",
-    "categories": "{count} especialidades"
+    "categories": "{count} especialidades",
+    "back": "Casos"
   },
   "caseDetail": {
     "takeCase": "Assumir o caso",

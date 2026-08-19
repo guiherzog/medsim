@@ -42,7 +42,7 @@ const KINDS: Record<
     Icon: Activity,
     wrap: "border-l-muted-foreground/40 bg-muted/40",
     chip: "bg-foreground/10 text-muted-foreground",
-    body: "font-mono text-[13px] tabular-nums",
+    body: "font-mono text-[12.5px] tabular-nums",
   },
   alarm: {
     Icon: BellRing,
@@ -99,9 +99,32 @@ export function LogEntry({ item, dim = false }: { item: LogItem; dim?: boolean }
           {formatClock(item.at)}
         </span>
       </div>
-      <p className={cn("text-sm leading-relaxed", kind.body, isBadOutcome && "text-destructive")}>
-        {item.text}
-      </p>
+      {item.kind === "vitals" && item.changes ? (
+        <p className={cn("flex flex-wrap gap-x-2 gap-y-0.5", kind.body)}>
+          {item.changes.map((c) => (
+            <span key={c.key} className="whitespace-nowrap">
+              {c.label} {c.from} → {c.to}{" "}
+              <span
+                className={cn(
+                  "font-bold",
+                  c.direction === "better"
+                    ? "text-[#0d7f72]"
+                    : c.direction === "worse"
+                      ? "text-destructive"
+                      : "text-muted-foreground",
+                )}
+              >
+                ({c.delta > 0 ? "+" : ""}
+                {c.delta})
+              </span>
+            </span>
+          ))}
+        </p>
+      ) : (
+        <p className={cn("text-sm leading-relaxed", kind.body, isBadOutcome && "text-destructive")}>
+          {item.text}
+        </p>
+      )}
     </div>
   );
 }
