@@ -1,5 +1,12 @@
 {
   "app": {
     "name": "MedSim"
+  },
+  "login": {
+    "title": "Entrar",
+    "subtitle": "Simulação clínica para estudantes e residentes",
+    "googleButton": "Entrar com Google",
+    "devButton": "Entrar como usuário de teste (dev)",
+    "error": "Não foi possível entrar. Tente novamente."
   }
 }
