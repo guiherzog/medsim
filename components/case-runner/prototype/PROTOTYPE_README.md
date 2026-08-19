@@ -75,3 +75,23 @@ so a given sequence of decisions always produces the same run.
 When a variant wins: fold it into the real screen properly (with a real schema,
 engine and tests), and move this directory + the switcher onto a throwaway
 branch rather than leaving them in main.
+
+## Round 4 — readable stats, and desperate mode
+
+**Each reading is now self-explanatory** (`VitalTile` + `vitalStatus.ts`).
+Severity is computed per vital from adult reference bands, so every tile carries
+its own colour, a `NORMAL / ALTERADO / CRÍTICO` chip, the delta from the
+admission reading (`-62`) and the reference range (`90–140`). Previously only
+the single "critical vital" was highlighted and everything else looked alike.
+
+**Desperate mode.** `patientStateOf()` returns `dying` on arrest, systolic < 70
+or SpO₂ < 85. Then: the screen edges pulse red (a full-screen vignette), the
+monitor gains a red ring and physically shakes, the status flips to
+`PACIENTE INSTÁVEL`, a `O PACIENTE ESTÁ MORRENDO — AJA AGORA` banner takes over,
+and the log dims to 45% so attention narrows to the monitor and the options.
+It clears by itself when the patient recovers.
+
+One tension worth recording: the first pass tinted the monitor panel red while
+dying, which flattened the per-vital severity colours — the two asks fought each
+other. The panel now goes near-black instead, so severity stays readable and
+"dying" is carried by the ring, shake, banner and vignette.
