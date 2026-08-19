@@ -7,118 +7,167 @@ disclaimer: >
   Deve ser confrontado com os protocolos institucionais vigentes antes de
   qualquer uso além de simulação/estudo.
 
-baseCase:
-  narrative: >
-    Mulher, 24 anos, sem comorbidades conhecidas, tomou amoxicilina prescrita
-    para infecção dentária. Vinte minutos depois, desenvolveu urticária
-    generalizada, angioedema de lábios e língua, e dificuldade para respirar.
-    Procurou o pronto-socorro acompanhada.
-  vitals: { pa: "100/60", fc: 110, spo2: 94 }
-  initialConductSeconds: 150
+briefing:
+  patient: "Mulher, 24 anos"
+  patientDetail: >
+    Sem comorbidades · amoxicilina para infecção dentária há 20 min · urticária
+    generalizada, angioedema de lábios e língua, dificuldade para respirar
+  meta: "~4 min · difícil · anafilaxia com via aérea ameaçada"
+  admissionVitals: { pa: "100/60", fc: 110, spo2: 94, fr: 24 }
+  note: "Você conduz em tempo real. Cada decisão altera os vitais — e a demora também."
 
-evolutions:
+steps:
   - id: "2.A"
-    direction: piora
-    narrative: >
+    event: >
       Enquanto aguarda avaliação, a paciente desenvolve estridor, rouquidão e
       piora do edema de língua, com esforço respiratório visível.
-    vitals: { pa: "94/58", fc: 122, spo2: 90 }
+    prompt: "Estridor e edema de língua progredindo. Sua conduta?"
+    vitals: { pa: "94/58", fc: 122, spo2: 90, fr: 28 }
+    criticalVital: spo2
+    decisionSeconds: 20
+    timeout:
+      feed: "Nenhuma conduta. O edema de via aérea progride e a saturação cai."
+      target: { pa: "88/52", fc: 130, spo2: 83, fr: 32 }
+      criticalVital: spo2
     options:
       - id: a1
-        text: "Administrar adrenalina IM (1:1000, 0,3–0,5 mg) na face anterolateral da coxa imediatamente."
+        label: "Adrenalina IM 0,5 mg na face anterolateral da coxa, imediatamente"
         correct: true
-        rationale: "É o tratamento de primeira linha e mais importante na anafilaxia; a via IM na coxa tem absorção mais rápida e confiável."
+        rationale: >
+          Tratamento de primeira linha na anafilaxia; a via IM na coxa tem
+          absorção mais rápida e confiável e reverte o edema de via aérea.
+        feed: "Adrenalina aplicada. O estridor reduz e a saturação começa a subir."
+        target: { pa: "106/66", fc: 104, spo2: 95, fr: 22 }
+        criticalVital: null
+        next: "2.B"
       - id: a2
-        text: "Preparar via aérea avançada (acionar anestesia/considerar intubação precoce) diante do estridor."
-        correct: true
-        rationale: "O edema de via aérea progride rapidamente; uma via aérea definitiva precoce evita uma via aérea de emergência mais adiante, em condições piores."
-      - id: a3
-        text: "Oferecer oxigênio suplementar em alto fluxo."
-        correct: true
-        rationale: "Sustenta a oxigenação enquanto o edema de via aérea e o quadro sistêmico evoluem."
-      - id: a4
-        text: "Administrar anti-histamínico IV ou oral como tratamento principal e inicial."
+        label: "Anti-histamínico IV como tratamento principal"
         correct: false
         critical: true
-        rationale: "Anti-histamínicos não revertem as manifestações potencialmente fatais da anafilaxia (via aérea/respiração/circulação); atrasar a adrenalina por isso é o erro mais perigoso no manejo da anafilaxia."
-      - id: a5
-        text: "Observar por alguns minutos antes de aplicar adrenalina, para 'confirmar' que é anafilaxia."
+        rationale: >
+          Anti-histamínicos não revertem obstrução de via aérea nem choque.
+          Atrasar a adrenalina por eles é o erro mais perigoso na anafilaxia.
+        feed: "Anti-histamínico não toca no edema de via aérea. O estridor piora e a saturação cai."
+        target: { pa: "84/50", fc: 132, spo2: 82, fr: 33 }
+        criticalVital: spo2
+        clip: "Anafilaxia: adrenalina primeiro, sempre"
+        next: "2.B"
+      - id: a3
+        label: "Oxigênio em alto fluxo e observar a resposta"
         correct: false
-        rationale: "Qualquer atraso na adrenalina aumenta o risco de obstrução fatal de via aérea ou choque."
-      - id: a6
-        text: "Aplicar adrenalina em bólus IV, na mesma dose usada para via IM."
+        rationale: >
+          O oxigênio sustenta a oxigenação, mas isolado não trata a causa — o
+          edema continua progredindo sem adrenalina.
+        feed: "Oxigênio ofertado. A saturação melhora pouco e o estridor persiste."
+        target: { pa: "92/56", fc: 124, spo2: 89, fr: 28 }
+        criticalVital: spo2
+        next: "2.B"
+      - id: a4
+        label: "Adrenalina IV em bólus, na mesma dose da via IM"
         correct: false
-        rationale: "Adrenalina IV em bólus e não diluída tem alto risco de arritmia letal ou crise hipertensiva; se necessária pela via IV, deve ser diluída e infundida, nunca em bólus na dose IM."
+        rationale: >
+          Adrenalina IV em bólus e não diluída tem alto risco de arritmia letal;
+          se necessária por via IV, deve ser diluída e infundida.
+        feed: "Bólus IV não diluído. Surgem extrassístoles e taquicardia importante."
+        target: { pa: "118/70", fc: 148, spo2: 92, fr: 26 }
+        criticalVital: fc
+        next: "2.B"
 
   - id: "2.B"
-    direction: piora
-    narrative: >
-      Após melhora inicial com a adrenalina e período de observação, a paciente
-      apresenta recorrência dos sintomas cerca de 6 horas depois — urticária,
-      sibilância e hipotensão — sem nova exposição ao alérgeno.
-    vitals: { pa: "88/54", fc: 118, spo2: 92 }
+    event: >
+      Após melhora inicial e período de observação, cerca de 6 horas depois a
+      paciente apresenta recorrência: urticária, sibilância e hipotensão, sem
+      nova exposição ao alérgeno.
+    prompt: "Recorrência dos sintomas sem nova exposição. Conduta?"
+    vitals: { pa: "88/54", fc: 118, spo2: 92, fr: 26 }
+    criticalVital: pa
+    decisionSeconds: 25
+    timeout:
+      feed: "Recorrência não tratada. A hipotensão e a sibilância progridem."
+      target: { pa: "74/44", fc: 128, spo2: 88, fr: 30 }
+      criticalVital: pa
     options:
       - id: b1
-        text: "Reconhecer como reação bifásica e administrar nova dose de adrenalina IM."
+        label: "Reconhecer reação bifásica e repetir adrenalina IM"
         correct: true
-        rationale: "A reação bifásica é tratada da mesma forma que o episódio inicial; a adrenalina permanece a primeira linha."
+        rationale: >
+          A reação bifásica é tratada como o episódio inicial; a adrenalina
+          permanece a primeira linha.
+        feed: "Nova dose de adrenalina. A PA sobe e a sibilância reduz."
+        target: { pa: "108/68", fc: 100, spo2: 96, fr: 20 }
+        criticalVital: null
+        next: "2.C"
       - id: b2
-        text: "Prolongar o período de observação/internação (por exemplo, 24 horas)."
-        correct: true
-        rationale: "Reações bifásicas podem ocorrer até 72 horas depois em uma minoria dos casos; a paciente precisa de uma janela de observação maior do que a inicialmente planejada."
-      - id: b3
-        text: "Reavaliar via aérea, respiração e circulação (ABC) do zero, como se fosse um novo episódio."
-        correct: true
-        rationale: "A reação bifásica pode ser tão grave quanto ou mais grave que a inicial; exige reavaliação completa, não a suposição de que será leve."
-      - id: b4
-        text: "Dar alta à paciente, já que 'a reação já tinha resolvido uma vez'."
+        label: "Dar alta — a reação já havia resolvido uma vez"
         correct: false
         critical: true
-        rationale: "É uma falsa segurança que ignora o risco de recorrência bifásica; pode levar à morte fora de ambiente monitorado."
-      - id: b5
-        text: "Tratar a recorrência apenas com anti-histamínico oral, já que 'agora é só urticária'."
+        rationale: >
+          Falsa segurança que ignora o risco de recorrência bifásica; pode levar
+          à morte fora de ambiente monitorado.
+        feed: "Alta indicada em plena recorrência. A paciente piora ainda na sala de espera."
+        target: { pa: "70/40", fc: 132, spo2: 85, fr: 32 }
+        criticalVital: pa
+        clip: "Reação bifásica: por que a alta precoce mata"
+        next: "2.C"
+      - id: b3
+        label: "Tratar apenas com anti-histamínico oral — 'agora é só urticária'"
         correct: false
-        rationale: "Subtrata uma reação sistêmica ao focar apenas nos sintomas cutâneos, ignorando a sibilância e a hipotensão presentes."
-      - id: b6
-        text: "Atribuir a recorrência à ansiedade e evitar nova dose de adrenalina."
-        correct: false
-        rationale: "Descartar uma reação bifásica real atrasa um tratamento potencialmente salvador."
+        rationale: >
+          Subtrata uma reação sistêmica ao focar na pele, ignorando sibilância e
+          hipotensão.
+        feed: "Apenas anti-histamínico. A urticária cede um pouco, mas a PA segue caindo."
+        target: { pa: "80/48", fc: 124, spo2: 90, fr: 28 }
+        criticalVital: pa
+        next: "2.C"
 
   - id: "2.C"
-    direction: piora
-    narrative: >
+    event: >
       Apesar de doses repetidas de adrenalina IM, a paciente permanece hipotensa
-      e chocada. Ao revisar a história, descobre-se uso regular de propranolol
-      para profilaxia de enxaqueca.
-    vitals: { pa: "76/44", fc: 96, spo2: 91 }
+      e chocada. A revisão da história revela uso regular de propranolol para
+      profilaxia de enxaqueca.
+    prompt: "Choque refratário à adrenalina em paciente betabloqueada. Conduta?"
+    vitals: { pa: "76/44", fc: 96, spo2: 91, fr: 26 }
+    criticalVital: pa
+    decisionSeconds: 25
+    timeout:
+      feed: "Choque refratário sem escalonamento de conduta. A perfusão continua caindo."
+      target: { pa: "64/38", fc: 92, spo2: 87, fr: 30 }
+      criticalVital: pa
     options:
       - id: c1
-        text: "Administrar glucagon IV."
+        label: "Glucagon IV e ressuscitação volêmica agressiva"
         correct: true
-        rationale: "O glucagon contorna o bloqueio beta-adrenérgico por uma via alternativa (AMPc), restaurando efeito inotrópico/cronotrópico na anafilaxia refratária por betabloqueador."
+        rationale: >
+          O glucagon contorna o bloqueio beta-adrenérgico por via alternativa
+          (AMPc), restaurando efeito inotrópico onde a adrenalina não responde.
+        feed: "Glucagon e volume infundidos. A PA finalmente responde."
+        target: { pa: "104/64", fc: 98, spo2: 95, fr: 22 }
+        criticalVital: null
+        next: null
       - id: c2
-        text: "Iniciar ressuscitação volêmica agressiva com cristaloide IV."
+        label: "Iniciar infusão contínua de adrenalina IV titulada, sob monitorização"
         correct: true
-        rationale: "O choque anafilático envolve vasodilatação maciça e extravasamento capilar; grandes volumes de fluido são essenciais, especialmente quando a resposta à adrenalina está diminuída."
+        rationale: >
+          Em choque refratário, a infusão contínua permite entrega titulável e
+          mais confiável do que repetir bólus IM que já falharam.
+        feed: "Infusão contínua iniciada e titulada. A PA sobe lentamente."
+        target: { pa: "96/58", fc: 104, spo2: 94, fr: 22 }
+        criticalVital: null
+        next: null
       - id: c3
-        text: "Iniciar/titular infusão contínua de adrenalina IV sob monitorização, em vez de apenas repetir doses IM."
-        correct: true
-        rationale: "Em choque refratário, a infusão contínua permite entrega mais confiável e titulável do que repetir bólus IM que já falharam."
-      - id: c4
-        text: "Continuar repetindo a mesma dose de adrenalina IM, esperando a mesma resposta, sem escalonar a conduta."
+        label: "Repetir a mesma dose de adrenalina IM, sem escalonar"
         correct: false
         critical: true
-        rationale: "Em paciente com bloqueio beta pelo propranolol, repetir a mesma dose IM ignora a razão farmacológica da falha terapêutica e desperdiça tempo crítico em choque refratário."
-      - id: c5
-        text: "Administrar broncodilatador beta-agonista inalatório isoladamente como tratamento principal do choque."
-        correct: false
-        rationale: "Trata apenas o broncoespasmo, sem abordar a hipotensão/choque, e não substitui glucagon e volume."
-      - id: c6
-        text: "Reter o glucagon por risco de náusea/vômito, aguardando outra alternativa."
-        correct: false
-        rationale: "O risco do choque refratário não tratado supera muito os efeitos colaterais do glucagon; reter essa droga atrasa o único fármaco que reverte o efeito do betabloqueio."
+        rationale: >
+          Ignora a razão farmacológica da falha — o betabloqueio — e desperdiça
+          tempo crítico em choque refratário.
+        feed: "Mais uma dose IM, mesma resposta ausente. O tempo passa e a perfusão piora."
+        target: { pa: "62/36", fc: 90, spo2: 86, fr: 31 }
+        criticalVital: pa
+        clip: "Anafilaxia refratária em uso de betabloqueador"
+        next: null
 
 scoring:
-  perOptionCorrectlyClassified: 1
-  criticalIdentificationBonus: 2
-  perEvolutionMax: 8
+  pointsPerCorrectDecision: 10
+  criticalErrorPenalty: 5
+  timeoutPenalty: 5

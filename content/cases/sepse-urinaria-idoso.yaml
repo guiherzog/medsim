@@ -3,122 +3,170 @@ title: "Sepse de foco urinário em homem de 72 anos"
 category: "Emergência/UTI"
 disclaimer: >
   Material didático baseado nas diretrizes da Surviving Sepsis Campaign,
-  elaborado com auxílio de IA e AINDA NÃO revisado por um preceptor
-  responsável. Deve ser confrontado com os protocolos institucionais
-  vigentes antes de qualquer uso além de simulação/estudo.
+  elaborado com auxílio de IA e AINDA NÃO revisado por um preceptor responsável.
+  Deve ser confrontado com os protocolos institucionais vigentes antes de
+  qualquer uso além de simulação/estudo.
 
-baseCase:
-  narrative: >
-    Homem, 72 anos, trazido ao pronto-socorro com febre, confusão mental
-    aguda e hipotensão. Exame de urina e urocultura compatíveis com
-    infecção urinária/pielonefrite. Diagnóstico: sepse de foco urinário.
-  vitals: { pa: "90/50", fc: 118, spo2: 93 }
-  initialConductSeconds: 150
+briefing:
+  patient: "Homem, 72 anos"
+  patientDetail: >
+    Febre, confusão mental aguda e hipotensão · urina e urocultura compatíveis
+    com pielonefrite · diagnóstico de sepse de foco urinário
+  meta: "~4 min · difícil · choque séptico e SDRA"
+  admissionVitals: { pa: "90/50", fc: 118, spo2: 93, fr: 24 }
+  note: "Você conduz em tempo real. Cada decisão altera os vitais — e a demora também."
 
-evolutions:
+steps:
   - id: "3.A"
-    direction: piora
-    narrative: >
-      Apesar de bólus de cristaloide (30 mL/kg), o paciente permanece
-      hipotenso, com PA 78/45 mmHg, extremidades frias e tempo de
-      enchimento capilar prolongado.
-    vitals: { pa: "78/45", fc: 124, spo2: 92 }
+    event: >
+      Apesar de bólus de cristaloide (30 mL/kg), o paciente permanece hipotenso,
+      com extremidades frias e tempo de enchimento capilar prolongado.
+    prompt: "Hipotensão refratária a volume. Conduta?"
+    vitals: { pa: "78/45", fc: 124, spo2: 92, fr: 26 }
+    criticalVital: pa
+    decisionSeconds: 30
+    timeout:
+      feed: "Nenhuma conduta. A hipoperfusão persiste e a acidose progride."
+      target: { pa: "68/40", fc: 132, spo2: 89, fr: 30 }
+      criticalVital: pa
     options:
       - id: a1
-        text: "Iniciar noradrenalina como vasopressor de primeira linha."
+        label: "Iniciar noradrenalina, com meta de PAM ≥ 65 mmHg"
         correct: true
-        rationale: "Segundo a Surviving Sepsis Campaign, a noradrenalina é o vasopressor de primeira linha no choque séptico refratário a volume, com meta de PAM ≥65 mmHg."
+        rationale: >
+          Vasopressor de primeira linha no choque séptico refratário a volume,
+          conforme a Surviving Sepsis Campaign.
+        feed: "Noradrenalina iniciada e titulada. A PA sobe e a perfusão periférica melhora."
+        target: { pa: "104/62", fc: 104, spo2: 95, fr: 22 }
+        criticalVital: null
+        next: "3.B"
       - id: a2
-        text: "Garantir hemoculturas coletadas e antibioticoterapia de amplo espectro já administrada dentro da primeira hora."
+        label: "Garantir hemoculturas e antibiótico de amplo espectro na primeira hora"
         correct: true
-        rationale: "Controle de foco e antibióticos precoces são elementos centrais do pacote de sepse; o atraso aumenta a mortalidade."
+        rationale: >
+          Antibiótico precoce e controle de foco são elementos centrais do pacote
+          de sepse; o atraso aumenta a mortalidade.
+        feed: "Culturas colhidas e antibiótico administrado. O foco começa a ser tratado."
+        target: { pa: "84/50", fc: 118, spo2: 93, fr: 25 }
+        criticalVital: pa
+        next: "3.B"
       - id: a3
-        text: "Reavaliar o status volêmico (ou usar parâmetros dinâmicos) antes de assumir vasoplegia pura."
-        correct: true
-        rationale: "Confirma que a refratariedade a fluidos é real antes de migrar totalmente para vasopressor, evitando tanto sub quanto sobre-ressuscitação."
-      - id: a4
-        text: "Continuar administrando bólus ilimitados de cristaloide em vez de iniciar vasopressor."
+        label: "Manter bólus repetidos de cristaloide, sem vasopressor"
         correct: false
         critical: true
-        rationale: "Atrasar o vasopressor no choque séptico refratário a volume prolonga a hipoperfusão de órgãos e aumenta o risco de sobrecarga hídrica (edema pulmonar, piora de eventual SDRA)."
-      - id: a5
-        text: "Iniciar dopamina como vasopressor de primeira linha."
+        rationale: >
+          Atrasa o vasopressor no choque refratário a volume, prolongando a
+          hipoperfusão e somando risco de sobrecarga hídrica.
+        feed: "Mais volume, sem vasopressor. A PA não responde e surge congestão pulmonar."
+        target: { pa: "66/38", fc: 134, spo2: 86, fr: 32 }
+        criticalVital: pa
+        clip: "Choque séptico: quando iniciar o vasopressor"
+        next: "3.B"
+      - id: a4
+        label: "Iniciar dopamina como vasopressor de primeira linha"
         correct: false
-        rationale: "A dopamina associa-se a mais arritmias e não é mais recomendada como primeira linha frente à noradrenalina no choque séptico."
-      - id: a6
-        text: "Aguardar o resultado das culturas antes de iniciar o antibiótico."
-        correct: false
-        rationale: "O antibiótico empírico de amplo espectro não deve ser postergado pela espera de culturas; deve ser iniciado imediatamente após a coleta."
+        rationale: >
+          A dopamina associa-se a mais arritmias e não é mais recomendada como
+          primeira linha frente à noradrenalina.
+        feed: "Dopamina iniciada. A PA sobe pouco e surgem extrassístoles frequentes."
+        target: { pa: "88/52", fc: 138, spo2: 91, fr: 26 }
+        criticalVital: fc
+        next: "3.B"
 
   - id: "3.B"
-    direction: piora
-    narrative: >
+    event: >
       Vinte e quatro horas depois, já em ventilação mecânica, o paciente
-      apresenta piora da hipoxemia com infiltrados bilaterais na radiografia
-      de tórax e relação PaO2/FiO2 de 150, compatível com SDRA moderada.
-    vitals: { pa: "104/64", fc: 98, spo2: 89 }
+      apresenta piora da hipoxemia com infiltrados bilaterais e relação
+      PaO2/FiO2 de 150 — SDRA moderada.
+    prompt: "SDRA moderada em ventilação mecânica. Ajuste ventilatório?"
+    vitals: { pa: "104/64", fc: 98, spo2: 89, fr: 28 }
+    criticalVital: spo2
+    decisionSeconds: 30
+    timeout:
+      feed: "Ventilação inalterada. A hipoxemia persiste sem estratégia protetora."
+      target: { pa: "100/60", fc: 104, spo2: 85, fr: 30 }
+      criticalVital: spo2
     options:
       - id: b1
-        text: "Utilizar ventilação com baixo volume corrente (cerca de 6 mL/kg de peso predito)."
+        label: "Ventilação protetora: volume corrente ~6 mL/kg de peso predito, platô < 30 cmH2O"
         correct: true
-        rationale: "A ventilação protetora reduz a lesão pulmonar induzida pelo ventilador e melhora a sobrevida na SDRA (protocolo ARDSNet)."
+        rationale: >
+          Reduz a lesão pulmonar induzida pelo ventilador e melhora a sobrevida
+          na SDRA (protocolo ARDSNet).
+        feed: "Ventilação protetora ajustada. A oxigenação melhora progressivamente."
+        target: { pa: "108/66", fc: 88, spo2: 95, fr: 20 }
+        criticalVital: null
+        next: "3.C"
       - id: b2
-        text: "Manter a pressão de platô abaixo de 30 cmH2O."
+        label: "Considerar posição prona pela hipoxemia persistente"
         correct: true
-        rationale: "Limita a hiperdistensão alveolar, um dos principais mecanismos de lesão pulmonar induzida pelo ventilador."
+        rationale: >
+          A pronação melhora a oxigenação e a mortalidade em SDRA moderada a
+          grave (estudo PROSEVA).
+        feed: "Paciente pronado. A oxigenação responde nas horas seguintes."
+        target: { pa: "106/64", fc: 92, spo2: 94, fr: 22 }
+        criticalVital: null
+        next: "3.C"
       - id: b3
-        text: "Considerar posição prona diante de hipoxemia persistente em SDRA moderada a grave."
-        correct: true
-        rationale: "A pronação melhora a oxigenação e a mortalidade em SDRA moderada a grave (estudo PROSEVA)."
-      - id: b4
-        text: "Usar volumes correntes altos (10–12 mL/kg) para 'melhorar a oxigenação mais rápido'."
+        label: "Aumentar o volume corrente para 10–12 mL/kg para melhorar a oxigenação"
         correct: false
         critical: true
-        rationale: "Volumes correntes altos pioram a lesão pulmonar induzida pelo ventilador e aumentam a mortalidade na SDRA — é o erro ventilatório mais perigoso neste cenário."
-      - id: b5
-        text: "Infundir fluidos de forma agressiva para 'sustentar a pressão arterial', sem reavaliar o status volêmico."
-        correct: false
-        rationale: "O excesso de fluidos piora o edema pulmonar e a gravidade da SDRA; uma estratégia hídrica conservadora é preferível uma vez controlado o choque."
-      - id: b6
-        text: "Suspender totalmente a sedação para 'acordar o paciente para avaliação' apesar da assincronia com o ventilador."
-        correct: false
-        rationale: "Sedação inadequada em SDRA grave com assincronia ventilatória pode piorar a lesão pulmonar e a assincronia paciente-ventilador; a sedação deve ser ajustada, não interrompida abruptamente."
+        rationale: >
+          Volumes correntes altos pioram a lesão pulmonar induzida pelo
+          ventilador e aumentam a mortalidade na SDRA.
+        feed: "Volume corrente elevado. A pressão de platô sobe e a hipoxemia piora."
+        target: { pa: "96/58", fc: 112, spo2: 83, fr: 32 }
+        criticalVital: spo2
+        clip: "SDRA: por que volume corrente alto mata"
+        next: "3.C"
 
   - id: "3.C"
-    direction: melhora
-    narrative: >
-      Dias depois, a oxigenação melhorou, o paciente está hemodinamicamente
-      estável sem vasopressor, e a equipe considera o desmame da ventilação
-      mecânica.
-    vitals: { pa: "118/72", fc: 82, spo2: 96 }
+    event: >
+      Dias depois a oxigenação melhorou, o paciente está estável sem vasopressor
+      e a equipe considera o desmame da ventilação mecânica.
+    prompt: "Paciente estável, candidato a desmame. Conduta?"
+    vitals: { pa: "118/72", fc: 82, spo2: 96, fr: 16 }
+    criticalVital: null
+    decisionSeconds: 45
+    timeout:
+      feed: "Nenhuma definição. O paciente segue intubado sem avaliação de prontidão."
+      target: { pa: "116/70", fc: 86, spo2: 95, fr: 17 }
+      criticalVital: null
     options:
       - id: c1
-        text: "Realizar um teste de respiração espontânea (TRE) antes de extubar."
+        label: "Realizar teste de respiração espontânea antes de extubar"
         correct: true
-        rationale: "O TRE é a avaliação padrão para determinar a prontidão para extubação."
+        rationale: >
+          O TRE é a avaliação padrão de prontidão para extubação e reduz falha de
+          extubação.
+        feed: "TRE realizado e bem tolerado. Extubação programada com segurança."
+        target: { pa: "120/74", fc: 80, spo2: 97, fr: 16 }
+        criticalVital: null
+        next: null
       - id: c2
-        text: "Manter a antibioticoterapia pelo tempo total adequado para sepse de foco urinário, sem suspender só por a melhora respiratória."
+        label: "Manter o antibiótico pelo tempo total adequado ao foco urinário"
         correct: true
-        rationale: "A suspensão precoce do antibiótico arrisca recidiva/controle inadequado do foco, mesmo com a melhora respiratória."
+        rationale: >
+          A suspensão precoce arrisca recidiva e controle inadequado do foco,
+          mesmo com melhora respiratória.
+        feed: "Antibiótico mantido pelo curso completo. Sem sinais de recidiva."
+        target: { pa: "119/73", fc: 82, spo2: 96, fr: 16 }
+        criticalVital: null
+        next: null
       - id: c3
-        text: "Iniciar mobilização e fisioterapia motora precoce, conforme tolerado."
-        correct: true
-        rationale: "A mobilização precoce reduz a fraqueza adquirida na UTI e melhora os desfechos funcionais em pacientes críticos em recuperação."
-      - id: c4
-        text: "Extubar imediatamente sem qualquer teste de respiração espontânea, só porque a oxigenação está boa."
+        label: "Extubar imediatamente, já que a oxigenação está boa"
         correct: false
         critical: true
-        rationale: "Pular o TRE/critérios de prontidão arrisca falha de extubação e reintubação, que carregam morbimortalidade significativa em um paciente pós-SDRA."
-      - id: c5
-        text: "Suspender o antibiótico antecipadamente porque o paciente 'está melhor'."
-        correct: false
-        rationale: "Arrisca tratamento inadequado do foco urinário e recidiva da sepse."
-      - id: c6
-        text: "Manter sedação intensa durante todo o processo de desmame 'por segurança'."
-        correct: false
-        rationale: "A sedação desnecessariamente prolongada atrasa o desmame e aumenta o risco de ventilação mecânica prolongada."
+        rationale: >
+          Pular o TRE arrisca falha de extubação e reintubação, com
+          morbimortalidade significativa num paciente pós-SDRA.
+        feed: "Extubação sem teste de prontidão. Em duas horas há esforço respiratório e necessidade de reintubação."
+        target: { pa: "104/62", fc: 116, spo2: 88, fr: 30 }
+        criticalVital: spo2
+        clip: "Desmame: por que o TRE não se pula"
+        next: null
 
 scoring:
-  perOptionCorrectlyClassified: 1
-  criticalIdentificationBonus: 2
-  perEvolutionMax: 8
+  pointsPerCorrectDecision: 10
+  criticalErrorPenalty: 5
+  timeoutPenalty: 5
