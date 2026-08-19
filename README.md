@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MedSim
 
-## Getting Started
+AI-assisted clinical case simulator for Brazilian medical students/residents. Cases are deterministic at runtime — no LLM drives narrative, vitals, or scoring live; AI may only assist drafting a case offline, and every case must carry a real doctor's `approval` before it's trustworthy (see `plan.md`'s Case Lifecycle Status).
 
-First, run the development server:
+- **`plan.md`** — the build plan: architecture decisions, case schema, data model, phased build order.
+- **`DESIGN_SYSTEM.md`** — component/UI conventions (shadcn/ui-based, `components/ui` → `components/{layout,case-runner,debrief}`).
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Environment variables (`.env.local`, gitignored):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=      # server-only, used by db/seed/seed_cases.ts
+DEV_LOGIN_EMAIL=                # dev-only auth bypass, see app/(auth)/login
+DEV_LOGIN_PASSWORD=
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Commands
 
-## Learn More
+```bash
+pnpm dev          # start the dev server
+pnpm build        # production build
+pnpm lint         # eslint
+pnpm test         # Vitest — engine unit tests
+pnpm test:e2e     # Playwright — auth + full case playthrough
+pnpm seed         # load content/cases/*.yaml into the DB (db/seed/seed_cases.ts)
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Auth
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Production auth is Google OAuth only (via Supabase Auth). Since creating the Google Cloud OAuth client requires a one-time manual step in the Google Cloud Console, `/login` also shows a dev-only "Entrar como usuário de teste (dev)" button (hidden once `NODE_ENV=production`) that signs in a real Supabase auth user via `signInWithPassword`, using the `DEV_LOGIN_EMAIL`/`DEV_LOGIN_PASSWORD` credentials.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Case content
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Cases live as YAML in `content/cases/`, validated against `lib/engine/caseSpec.schema.ts`. `pnpm seed` upserts them by slug; a case's `status` becomes `reviewed` only when its YAML has both `approval.approvedBy` and `approval.approvedAt` filled in by a real reviewer — otherwise it seeds as `under_review` and is clearly badged as such in the UI.
