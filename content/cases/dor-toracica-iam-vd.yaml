@@ -1,0 +1,125 @@
+slug: dor-toracica-iam-vd
+title: "Dor torácica em homem de 58 anos"
+category: Cardiologia
+disclaimer: >
+  Material didático baseado em condutas de referência ACLS/AHA, elaborado com
+  auxílio de IA e AINDA NÃO revisado por um preceptor responsável. Deve ser
+  confrontado com os protocolos institucionais vigentes antes de qualquer uso
+  além de simulação/estudo.
+
+baseCase:
+  narrative: >
+    Homem, 58 anos, hipertenso e tabagista (40 maços-ano), chega ao pronto-socorro
+    com dor torácica opressiva de início há 40 minutos, irradiando para o braço
+    esquerdo, associada a sudorese fria. ECG de admissão mostra supradesnivelamento
+    do segmento ST em DII, DIII e aVF, compatível com infarto agudo do miocárdio
+    de parede inferior.
+  vitals: { pa: "130/80", fc: 62, spo2: 96 }
+  initialConductSeconds: 150
+
+evolutions:
+  - id: "1.A"
+    direction: piora
+    narrative: >
+      Após nitrato sublingual administrado para alívio da dor, o paciente evolui
+      com PA 72/40 mmHg, palidez cutânea e turgência jugular patente. A dor
+      torácica persiste.
+    vitals: { pa: "72/40", fc: null, spo2: null }
+    options:
+      - id: a1
+        text: "Suspender o nitrato e infundir cristaloide 250–500 mL em bólus, reavaliando a resposta pressórica."
+        correct: true
+        rationale: "Repõe a pré-carga do ventrículo direito, que está infartado e dependente de volume; reverte a hipotensão induzida pelo nitrato."
+      - id: a2
+        text: "Realizar ECG com derivações direitas (V3R–V4R) para confirmar infarto de ventrículo direito."
+        correct: true
+        rationale: "Confirma o infarto de VD, mudando a conduta imediata (evitar redução de pré-carga, priorizar volume)."
+      - id: a3
+        text: "Manter e acelerar o encaminhamento para reperfusão (angioplastia primária)."
+        correct: true
+        rationale: "A reperfusão coronariana definitiva continua sendo a prioridade terapêutica, independente da hipotensão."
+      - id: a4
+        text: "Repetir o nitrato sublingual ou iniciar nitroglicerina IV para tentar controlar a dor."
+        correct: false
+        critical: true
+        rationale: "Agrava a hipotensão ao reduzir ainda mais a pré-carga em um ventrículo direito infartado e dependente de volume — pode precipitar choque cardiogênico."
+      - id: a5
+        text: "Administrar furosemida IV, presumindo congestão pulmonar."
+        correct: false
+        rationale: "Reduz ainda mais a pré-carga em um paciente que precisa de volume, não de diurético; não há evidência de congestão pulmonar nesse quadro."
+      - id: a6
+        text: "Iniciar betabloqueador IV para controle da frequência cardíaca."
+        correct: false
+        rationale: "Piora a hipotensão ao bloquear a resposta cronotrópica compensatória, essencial para manter o débito cardíaco no infarto de VD."
+
+  - id: "1.B"
+    direction: piora
+    narrative: >
+      Durante o transporte para a hemodinâmica, o paciente subitamente perde a
+      consciência. Monitor mostra fibrilação ventricular; pulso central ausente.
+    vitals: { pa: null, fc: null, spo2: null }
+    options:
+      - id: b1
+        text: "Iniciar compressões torácicas de alta qualidade imediatamente."
+        correct: true
+        rationale: "Em FV com ausência de pulso, RCP de alta qualidade sem demora é a base do suporte até a desfibrilação, conforme ACLS."
+      - id: b2
+        text: "Desfibrilar assim que possível, com choque não sincronizado."
+        correct: true
+        rationale: "A FV é um ritmo chocável; a desfibrilação precoce é a intervenção isolada mais eficaz para reverter o ritmo."
+      - id: b3
+        text: "Retomar as compressões imediatamente após o choque, por 2 minutos, antes de checar o ritmo."
+        correct: true
+        rationale: "Minimizar interrupções nas compressões melhora as chances de retorno de circulação espontânea, conforme o algoritmo de PCR do ACLS."
+      - id: b4
+        text: "Realizar cardioversão elétrica sincronizada."
+        correct: false
+        critical: true
+        rationale: "A FV não tem QRS organizado para sincronizar; tentar cardioversão sincronizada atrasa ou impede a entrega do choque, desperdiçando tempo crítico numa parada com ritmo chocável."
+      - id: b5
+        text: "Interromper as compressões por até 2 minutos para checar pulso e ritmo com cuidado antes de agir."
+        correct: false
+        rationale: "Checagens de pulso/ritmo devem ser breves (menos de 10 segundos); prolongá-las atrasa as compressões e piora o desfecho."
+      - id: b6
+        text: "Administrar nitrato sublingual para 'tratar a causa de base' antes de qualquer outra medida."
+        correct: false
+        rationale: "É irrelevante e perigoso durante a parada cardiorrespiratória; atrasa o algoritmo de RCP/desfibrilação, que é a prioridade absoluta."
+
+  - id: "1.C"
+    direction: melhora
+    narrative: >
+      Retorno da circulação espontânea após o 2º choque. Angioplastia primária
+      realizada com sucesso, stent em coronária direita, fluxo TIMI 3. Seis horas
+      depois, o paciente está assintomático, orientado, hemodinamicamente estável.
+    vitals: { pa: "118/76", fc: 74, spo2: 97 }
+    options:
+      - id: c1
+        text: "Manter dupla antiagregação plaquetária (AAS + inibidor de P2Y12), se ainda não iniciada."
+        correct: true
+        rationale: "É a prevenção secundária padrão pós-angioplastia com stent, reduzindo o risco de trombose de stent."
+      - id: c2
+        text: "Manter monitorização cardíaca contínua, dado o episódio recente de FV."
+        correct: true
+        rationale: "Pacientes pós-parada por FV permanecem em risco de arritmias malignas recorrentes; a monitorização contínua é obrigatória."
+      - id: c3
+        text: "Solicitar ecocardiograma para avaliar fração de ejeção antes de planejar a alta."
+        correct: true
+        rationale: "Orienta o prognóstico, a necessidade de terapia para insuficiência cardíaca e a eventual indicação de cardiodesfibrilador implantável."
+      - id: c4
+        text: "Liberar o paciente para casa ainda hoje, já que está assintomático."
+        correct: false
+        critical: true
+        rationale: "O paciente teve parada cardíaca e IAM com supra tratado por angioplastia; requer observação, estratificação de risco e otimização terapêutica — alta no mesmo dia é insegura independentemente do alívio dos sintomas."
+      - id: c5
+        text: "Suspender a antiagregação plaquetária, já que o paciente está assintomático."
+        correct: false
+        rationale: "A suspensão precoce da antiagregação expõe o paciente a risco de trombose aguda de stent, potencialmente fatal."
+      - id: c6
+        text: "Dispensar o ecocardiograma, já que os sinais vitais estão estáveis."
+        correct: false
+        rationale: "Sinais vitais normais não excluem disfunção ventricular significativa; a avaliação da fração de ejeção é essencial para o prognóstico e manejo."
+
+scoring:
+  perOptionCorrectlyClassified: 1
+  criticalIdentificationBonus: 2
+  perEvolutionMax: 8
