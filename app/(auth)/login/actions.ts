@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/db/client";
+import { isDevLoginAllowed } from "@/lib/auth/devLogin";
 
 // Prefers an explicit site URL, falls back to Vercel's per-deployment URL
 // (so every preview deployment gets a working OAuth redirect automatically),
@@ -26,9 +27,9 @@ export async function signInWithGoogle() {
 
 // Dev-only convenience so the rest of the app can be built/tested before a
 // real Google OAuth client exists (plan.md's Q10 auth decision is unaffected —
-// this path is unreachable once NODE_ENV is production).
+// this path is unreachable on a real production deployment, see isDevLoginAllowed).
 export async function signInAsDevUser() {
-  if (process.env.NODE_ENV === "production") redirect("/login?error=auth");
+  if (!isDevLoginAllowed()) redirect("/login?error=auth");
 
   const email = process.env.DEV_LOGIN_EMAIL;
   const password = process.env.DEV_LOGIN_PASSWORD;

@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { signInWithGoogle, signInAsDevUser } from "./actions";
+import { isDevLoginAllowed } from "@/lib/auth/devLogin";
 
 export default async function LoginPage({
   searchParams,
@@ -29,7 +30,7 @@ export default async function LoginPage({
               {t("googleButton")}
             </Button>
           </form>
-          {process.env.NODE_ENV !== "production" && (
+          {isDevLoginAllowed() && (
             <form action={signInAsDevUser}>
               <Button type="submit" variant="outline" className="w-full">
                 {t("devButton")}
