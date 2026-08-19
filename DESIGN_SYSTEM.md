@@ -24,14 +24,16 @@ components/
 │   └── StatusBadge.tsx           # case.status -> label + color (under_review/reviewed/draft/disabled)
 ├── case-runner/   # feature components for the case-play flow, composed from ui/
 │   ├── CaseCard.tsx              # one card on the case-list screen (Card + StatusBadge + category Badge)
-│   ├── VitalsPanel.tsx           # renders pa/fc/spo2; null = "—", never carried forward (plan.md Q4)
+│   ├── PatientCard.tsx           # the mocks' briefing card: hatched avatar tile + presentation
+│   ├── VitalsPanel.tsx           # the mocks' deep-navy vitals block; null = "—", never carried forward (Q4)
 │   ├── InitialConductTimer.tsx   # hard-gated countdown; reveal disabled until 0 (Q8); textarea -> initial_conduct_text (Q3)
 │   ├── EvolutionNarrative.tsx    # narrative text block for one evolution
 │   ├── OptionRow.tsx             # one of the 6 options: correct/incorrect call + "most dangerous" pick, unrestricted (Q6)
 │   ├── OptionList.tsx            # composes 6 OptionRows + submit button
 │   └── EvolutionScoreFeedback.tsx # immediate per-evolution score after submit
 └── debrief/
-    ├── ScoreSummary.tsx          # total / max score
+    ├── ScoreSummary.tsx          # the mocks' readiness ring (conic-gradient) on a DeepPanel
+    ├── OutcomeCallout.tsx        # the mocks' "O que foi bem" / "Ponto crítico de falha" callouts
     ├── EvolutionBreakdown.tsx    # per-evolution score + critical-miss flag
     └── RationaleReview.tsx       # all 6 options' rationale shown, correct/incorrect/critical marked (Q5)
 ```
@@ -81,6 +83,10 @@ Taken from the MedSim design mocks (the "MedSim AI data briefing" artifact), def
 **Radii** — the mocks are generous: `--radius: 1rem`, with `rounded-3xl` heroes, `rounded-2xl` cards/CTAs, `9px`/`13px` icon tiles.
 
 **Layout** — the mocks are mobile-first: one centred column capped at **520px**. Always use `AppShell`, never a bare `max-w-*` container.
+
+**Case-screen patterns** copied from the mocks: a briefing leads with a mono eyebrow (category) then a 28px display title; the patient presentation sits in `PatientCard`; vitals sit on the deep navy `VitalsPanel` with label-over-value stats; choices are soft-grey rows with a 1.5px border that turns `--sky` on hover (`OptionRow`); the debrief pairs the score ring with the two `OutcomeCallout`s.
+
+Where the mocks describe behaviour this app deliberately doesn't have — a real-time monitor whose vitals shift per decision, microvídeos, the paywall — the *visual* pattern is copied but the copy is rewritten to describe what actually happens. Never ship mock copy that misdescribes the app.
 
 ## Status badge mapping (`StatusBadge`)
 

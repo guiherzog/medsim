@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { AppShell } from "@/components/layout/AppShell";
 import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
+import { Eyebrow } from "@/components/layout/Eyebrow";
 import { CaseIntro } from "@/components/case-runner/CaseIntro";
 import { createClient } from "@/lib/db/client";
 import { getPlayableCaseBySlug } from "@/lib/db/queries/cases";
@@ -21,9 +22,17 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ cas
       <AppHeader />
       <main>
         <AppShell>
-        <DisclaimerBanner disclaimer={caseRow.disclaimer} />
-        <h1 className="text-2xl font-semibold">{caseRow.title}</h1>
-        <CaseIntro slug={caseRow.slug} baseCase={caseRow.caseSpec.baseCase} vitalsTitle={t("vitalsTitle")} />
+          <DisclaimerBanner disclaimer={caseRow.disclaimer} />
+          {/* The mocks lead a case briefing with a mono eyebrow, then the title. */}
+          <div>
+            <Eyebrow className="text-muted-foreground">{caseRow.category}</Eyebrow>
+            <h1 className="mt-3 text-[28px] leading-[1.06]">{caseRow.title}</h1>
+          </div>
+          <CaseIntro
+            slug={caseRow.slug}
+            baseCase={caseRow.caseSpec.baseCase}
+            admissionVitalsTitle={t("admissionVitals")}
+          />
         </AppShell>
       </main>
     </>

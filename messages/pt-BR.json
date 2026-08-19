@@ -33,7 +33,9 @@
     "initialConductLabel": "Antes de ver a evolução, registre sua conduta inicial:",
     "initialConductPlaceholder": "O que você faria agora?",
     "revealButton": "Ver evolução",
-    "waitingButton": "Aguarde {seconds}s..."
+    "waitingButton": "Aguarde {seconds}s...",
+    "admissionVitals": "Vitais na admissão",
+    "flowNote": "O caso evolui em 3 etapas fixas. Em cada uma você classifica as condutas e aponta a mais perigosa — a pontuação é imediata."
   },
   "evolution": {
     "progress": "Evolução {current} de {total}",
@@ -59,6 +61,11 @@
     "rationaleTitle": "Revisão das condutas",
     "criticalOptionLabel": "erro crítico",
     "misclassifiedLabel": "classificação incorreta",
-    "backToCases": "Voltar para os casos"
+    "backToCases": "Voltar para os casos",
+    "whatWentWell": "O que foi bem",
+    "whatWentWellBody": "Você classificou corretamente {count} de {total} condutas ao longo do caso.",
+    "criticalFailure": "Ponto crítico de falha",
+    "criticalFailureBody": "Erro crítico não identificado em: {evolutions}.",
+    "allCriticalsFound": "Você identificou o erro crítico em todas as evoluções."
   }
 }
