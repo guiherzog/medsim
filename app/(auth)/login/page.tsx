@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { AppShell } from "@/components/layout/AppShell";
 import { DeepPanel } from "@/components/layout/DeepPanel";
 import { IconTile } from "@/components/layout/IconTile";
-import { signInWithGoogle, signInAsDevUser } from "./actions";
+import { signInWithGoogle } from "./actions";
 import { isDevLoginAllowed } from "@/lib/auth/devLogin";
+import { DevLoginButton } from "@/components/layout/DevLoginButton";
 
 const SELLING_POINTS = [
   { key: "evolves", icon: HeartPulse, tone: "mint" },
@@ -55,13 +56,7 @@ export default async function LoginPage({
               {t("googleButton")}
             </Button>
           </form>
-          {isDevLoginAllowed() && (
-            <form action={signInAsDevUser}>
-              <Button type="submit" variant="outline" size="cta" className="text-base">
-                {t("devButton")}
-              </Button>
-            </form>
-          )}
+          {isDevLoginAllowed() && <DevLoginButton />}
         </div>
       </AppShell>
     </main>
