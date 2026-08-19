@@ -4,10 +4,16 @@
   },
   "login": {
     "title": "Entrar",
-    "subtitle": "Simulação clínica para estudantes e residentes",
+    "subtitle": "Simulador clínico por IA. Erre aqui — não no paciente.",
     "googleButton": "Entrar com Google",
     "devButton": "Entrar como usuário de teste (dev)",
-    "error": "Não foi possível entrar. Tente novamente."
+    "error": "Não foi possível entrar. Tente novamente.",
+    "headline": "Treine plantões antes de vivê-los.",
+    "points": {
+      "evolves": "Paciente virtual que evolui em tempo real",
+      "feedback": "Feedback técnico ao final de cada evolução",
+      "tracks": "Trilhas de urgência e residência"
+    }
   },
   "status": {
     "reviewed": "Revisado por especialista",

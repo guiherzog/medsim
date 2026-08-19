@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/layout/AppHeader";
+import { AppShell } from "@/components/layout/AppShell";
 import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
 import { buttonVariants } from "@/components/ui/button";
 import { ScoreSummary } from "@/components/debrief/ScoreSummary";
@@ -37,7 +38,8 @@ export default async function DebriefPage({
   return (
     <>
       <AppHeader />
-      <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
+      <main>
+        <AppShell>
         <DisclaimerBanner disclaimer={caseRow.disclaimer} />
         <ScoreSummary score={attempt.finalScore ?? 0} maxScore={attempt.maxPossibleScore ?? 0} />
         <EvolutionBreakdown evolutionScores={attempt.evolutionResults} />
@@ -51,6 +53,7 @@ export default async function DebriefPage({
         <Link href="/cases" className={buttonVariants({ className: "self-start" })}>
           {t("backToCases")}
         </Link>
+        </AppShell>
       </main>
     </>
   );

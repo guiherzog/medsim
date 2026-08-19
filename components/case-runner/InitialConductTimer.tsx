@@ -49,6 +49,8 @@ export function InitialConductTimer({
       />
       <Button
         type="button"
+        variant="brand"
+        size="cta"
         disabled={remaining > 0 || isSubmitting}
         onClick={() => onReveal(text)}
       >

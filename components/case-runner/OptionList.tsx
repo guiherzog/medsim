@@ -64,7 +64,7 @@ export function OptionList({
         {!canSubmit && !isSubmitting && (
           <p className="text-xs text-muted-foreground">{t("submitDisabledHint")}</p>
         )}
-        <Button type="button" disabled={!canSubmit} onClick={handleSubmit}>
+        <Button type="button" variant="brand" size="cta" disabled={!canSubmit} onClick={handleSubmit}>
           {t("submit")}
         </Button>
       </div>

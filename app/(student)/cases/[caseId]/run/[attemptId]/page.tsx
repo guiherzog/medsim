@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/layout/AppHeader";
+import { AppShell } from "@/components/layout/AppShell";
 import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
 import { EvolutionNarrative } from "@/components/case-runner/EvolutionNarrative";
 import { VitalsPanel } from "@/components/case-runner/VitalsPanel";
@@ -40,7 +41,8 @@ export default async function CaseRunPage({
   return (
     <>
       <AppHeader />
-      <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
+      <main>
+        <AppShell>
         <DisclaimerBanner disclaimer={caseRow.disclaimer} />
         <p className="text-sm text-muted-foreground">
           {t("progress", { current: evolutionIndex + 1, total: caseRow.caseSpec.evolutions.length })}
@@ -54,6 +56,7 @@ export default async function CaseRunPage({
           caseSlug={slug}
           options={options}
         />
+        </AppShell>
       </main>
     </>
   );

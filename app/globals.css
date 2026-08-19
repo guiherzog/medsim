@@ -7,13 +7,21 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  /* These must point at the variables app/layout.tsx actually defines via
-     next/font (--font-geist-sans / --font-geist-mono). shadcn's init wrote
-     `--font-sans: var(--font-sans)`, a self-reference that resolves to
-     nothing, so every element fell back to the browser's default serif. */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-geist-sans);
+  /* Must point at variables app/layout.tsx actually defines via next/font.
+     shadcn's init wrote `--font-sans: var(--font-sans)`, a self-reference
+     that resolves to nothing, which fell back to the browser's serif. */
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono-label);
+  --font-heading: var(--font-display);
+
+  /* Design-system tokens taken from the MedSim design mocks. */
+  --color-app: var(--app);
+  --color-mint: var(--mint);
+  --color-sky: var(--sky);
+  --color-violet: var(--violet);
+  --color-deep: var(--deep);
+  --color-deep-foreground: var(--deep-foreground);
+  --color-deep-muted: var(--deep-muted);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -53,72 +61,92 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Palette lifted from the design mocks: a light blue-grey app ground,
+     deep navy display surfaces, mint->sky gradient for primary actions. */
+  --app: #f5f7fc;
+  --background: #ffffff;
+  --foreground: #0d1b2a;
+  --card: #ffffff;
+  --card-foreground: #0d1b2a;
+  --popover: #ffffff;
+  --popover-foreground: #0d1b2a;
+  --primary: #2b6fc4;
+  --primary-foreground: #ffffff;
+  --secondary: #eaf1fb;
+  --secondary-foreground: #0d1f45;
+  --muted: #eef1f6;
+  --muted-foreground: #5b6b7d;
+  --accent: #eaf1fb;
+  --accent-foreground: #0d1f45;
+  --destructive: #d1483c;
+  --border: #dbe4f0;
+  --input: #dbe4f0;
+  --ring: #4aa3ff;
+
+  /* Named accents used by gradients, icon tiles and status colours. */
+  --mint: #38e2c5;
+  --sky: #4aa3ff;
+  --violet: #8b7bff;
+  --deep: #0d1f45;
+  --deep-foreground: #eaf1fb;
+  --deep-muted: #8fb4d6;
+
+  /* The mocks use generous radii: 28px heroes, 24/20px cards, 16px buttons. */
+  --radius: 1rem;
+  --chart-1: #4aa3ff;
+  --chart-2: #38e2c5;
+  --chart-3: #8b7bff;
+  --chart-4: #ff9d6b;
+  --chart-5: #ff6b6b;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0d1b2a;
+  --sidebar-primary: #2b6fc4;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eaf1fb;
+  --sidebar-accent-foreground: #0d1f45;
+  --sidebar-border: #dbe4f0;
+  --sidebar-ring: #4aa3ff;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --app: #06121f;
+  --background: #0b1024;
+  --foreground: #eaf1fb;
+  --card: #122250;
+  --card-foreground: #eaf1fb;
+  --popover: #122250;
+  --popover-foreground: #eaf1fb;
+  --primary: #4aa3ff;
+  --primary-foreground: #06121f;
+  --secondary: #0d1f45;
+  --secondary-foreground: #eaf1fb;
+  --muted: #0d1f45;
+  --muted-foreground: #8fb4d6;
+  --accent: #0d1f45;
+  --accent-foreground: #eaf1fb;
+  --destructive: #ff6b6b;
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: #4aa3ff;
+  --mint: #38e2c5;
+  --sky: #4aa3ff;
+  --violet: #8b7bff;
+  --deep: #0d1f45;
+  --deep-foreground: #eaf1fb;
+  --deep-muted: #8fb4d6;
+  --chart-1: #4aa3ff;
+  --chart-2: #38e2c5;
+  --chart-3: #8b7bff;
+  --chart-4: #ff9d6b;
+  --chart-5: #ff6b6b;
+  --sidebar: #122250;
+  --sidebar-foreground: #eaf1fb;
+  --sidebar-primary: #4aa3ff;
+  --sidebar-primary-foreground: #06121f;
+  --sidebar-accent: #0d1f45;
+  --sidebar-accent-foreground: #eaf1fb;
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: #4aa3ff;
 }
 
 @layer base {
@@ -126,9 +154,14 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-app text-foreground;
   }
   html {
     @apply font-sans;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-heading font-extrabold tracking-tight;
   }
 }

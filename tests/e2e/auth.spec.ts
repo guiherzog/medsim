@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test("unauthenticated visitor is redirected to /login", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByText("Entrar", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Entrar com Google" })).toBeVisible();
 });
 
 test("dev login lands on the authenticated shell", async ({ page }) => {

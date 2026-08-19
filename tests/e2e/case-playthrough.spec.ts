@@ -18,8 +18,11 @@ test("perfect playthrough of dor-toracica-iam-vd scores full marks and shows rat
   await page.clock.install();
   await page.goto(`/cases/${caseSpec.slug}`);
   await expect(page.getByText(caseSpec.title)).toBeVisible();
-  // runFor (not fastForward) actually fires the recurring setInterval tick-by-tick.
-  await page.clock.runFor("00:02:35");
+  // Wait for the countdown to mount before advancing: a slow first compile
+  // would otherwise consume the mocked ticks before the interval exists.
+  // runFor (not fastForward) actually fires the recurring setInterval.
+  await page.getByRole("button", { name: /Aguarde/ }).waitFor();
+  await page.clock.runFor("00:03:00");
   await page.getByRole("button", { name: "Ver evolução" }).click();
   await expect(page).toHaveURL(new RegExp(`/cases/${caseSpec.slug}/run/`));
 

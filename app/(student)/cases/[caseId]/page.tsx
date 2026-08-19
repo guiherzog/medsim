@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/layout/AppHeader";
+import { AppShell } from "@/components/layout/AppShell";
 import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
 import { CaseIntro } from "@/components/case-runner/CaseIntro";
 import { createClient } from "@/lib/db/client";
@@ -18,10 +19,12 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ cas
   return (
     <>
       <AppHeader />
-      <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
+      <main>
+        <AppShell>
         <DisclaimerBanner disclaimer={caseRow.disclaimer} />
         <h1 className="text-2xl font-semibold">{caseRow.title}</h1>
         <CaseIntro slug={caseRow.slug} baseCase={caseRow.caseSpec.baseCase} vitalsTitle={t("vitalsTitle")} />
+        </AppShell>
       </main>
     </>
   );

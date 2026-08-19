@@ -23,7 +23,7 @@ export function EvolutionScoreFeedback({
         <p className={evolutionScore.criticalWasIdentified ? "text-sm text-green-600" : "text-sm text-destructive"}>
           {evolutionScore.criticalWasIdentified ? t("criticalIdentified") : t("criticalMissed")}
         </p>
-        <Button type="button" onClick={onContinue} className="self-end">
+        <Button type="button" variant="brand" size="cta" onClick={onContinue}>
           {isComplete ? t("finish") : t("next")}
         </Button>
       </CardContent>

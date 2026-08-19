@@ -15,7 +15,11 @@ components/
 ├── ui/            # shadcn/ui primitives — generated, not hand-written. Button, Card, Badge,
 │                  # Checkbox, RadioGroup, Progress, Separator, Dialog, Skeleton, Alert, Toast.
 ├── layout/        # shared chrome used on every case screen
-│   ├── AppHeader.tsx
+│   ├── AppShell.tsx              # the mocks' 520px mobile column — every screen sits in this
+│   ├── AppHeader.tsx             # brand mark (IconTile) + wordmark
+│   ├── DeepPanel.tsx             # deep navy gradient surface w/ mint glow (hero, score panel)
+│   ├── IconTile.tsx              # rounded tinted icon square (tones: brand/mint/sky/violet/danger)
+│   ├── Eyebrow.tsx               # small uppercase mono label ("SINAIS VITAIS ATUALIZADOS")
 │   ├── DisclaimerBanner.tsx      # renders case.disclaimer via Alert; persistent per plan.md
 │   └── StatusBadge.tsx           # case.status -> label + color (under_review/reviewed/draft/disabled)
 ├── case-runner/   # feature components for the case-play flow, composed from ui/
@@ -32,19 +36,49 @@ components/
     └── RationaleReview.tsx       # all 6 options' rationale shown, correct/incorrect/critical marked (Q5)
 ```
 
+## Buttons
+
+`components/ui/button.tsx` carries two additions matching the mocks, on top of shadcn's variants:
+
+- `variant="brand"` — the mint→sky gradient CTA with dark navy text and display type.
+- `size="cta"` — the full-width 16px-radius primary action.
+
+Every screen's main forward action (`Ver evolução`, `Confirmar respostas`, `Próxima evolução`) uses `variant="brand" size="cta"`.
+
 ## The rule
 
 If a piece of markup appears a second time, or carries semantic meaning (a status, a score, an option, a vitals reading), it becomes a component under the right folder **before** the third usage — not after. No inline `<div className="...">` reimplementing something `components/ui/` or `components/case-runner/` already has. When in doubt about where something belongs: `ui/` = no domain knowledge (would make sense in any app), `layout/` = knows about cases/status but not about the play flow, `case-runner/`/`debrief/` = knows about evolutions/scoring specifically.
 
-## Design tokens (Tailwind theme extension / shadcn CSS vars)
+## Design tokens
 
-| Token | Use |
-|---|---|
-| `--primary` | clinical blue — primary actions, links |
-| `--destructive` | incorrect option, critical-error flag |
-| `--success` | correct option, "reviewed" status |
-| `--warning` | "under_review" status badge |
-| `--muted` | metadata, secondary text, disabled/draft (never shown to students) |
+Taken from the MedSim design mocks (the "MedSim AI data briefing" artifact), defined in `app/globals.css`.
+
+**Type** — three faces, loaded via `next/font/google` in `app/layout.tsx`:
+
+| Role | Family | Tailwind |
+|---|---|---|
+| Display / headings | Hanken Grotesk (700/800) | `font-heading` |
+| Body | Source Sans 3 | `font-sans` (default) |
+| Eyebrow labels | IBM Plex Mono (500/600) | `font-mono` |
+
+`h1`–`h3` get `font-heading` automatically from the base layer.
+
+**Colour**
+
+| Token | Value | Use |
+|---|---|---|
+| `--app` | `#f5f7fc` | page ground (the shell's background, not `--background`) |
+| `--foreground` | `#0d1b2a` | body text |
+| `--muted-foreground` | `#5b6b7d` | secondary text, eyebrow labels |
+| `--primary` | `#2b6fc4` | links, non-gradient primary |
+| `--mint` / `--sky` / `--violet` | `#38e2c5` / `#4aa3ff` / `#8b7bff` | gradients, icon tiles, score ring |
+| `--deep` + `--deep-foreground` | `#0d1f45` on `#eaf1fb` | deep navy display surfaces |
+| `--deep-muted` | `#8fb4d6` | secondary text on deep surfaces |
+| `--destructive` | `#d1483c` | incorrect option, critical-error flag, disclaimer |
+
+**Radii** — the mocks are generous: `--radius: 1rem`, with `rounded-3xl` heroes, `rounded-2xl` cards/CTAs, `9px`/`13px` icon tiles.
+
+**Layout** — the mocks are mobile-first: one centred column capped at **520px**. Always use `AppShell`, never a bare `max-w-*` container.
 
 ## Status badge mapping (`StatusBadge`)
 

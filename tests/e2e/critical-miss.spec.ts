@@ -12,7 +12,8 @@ test("deliberately missing the critical error is flagged immediately and in the 
   await expect(page).toHaveURL(/\/cases$/);
 
   await page.goto(`/cases/${caseSpec.slug}`);
-  await page.clock.runFor("00:02:35");
+  await page.getByRole("button", { name: /Aguarde/ }).waitFor();
+  await page.clock.runFor("00:03:00");
   await page.getByRole("button", { name: "Ver evolução" }).click();
   await expect(page).toHaveURL(new RegExp(`/cases/${caseSpec.slug}/run/`));
 
