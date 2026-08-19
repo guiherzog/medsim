@@ -37,13 +37,13 @@ export function Monitor({
   return (
     <div
       className={cn(
-        "shrink-0 rounded-3xl p-5 transition-colors duration-500",
+        "shrink-0 rounded-2xl p-3 transition-colors duration-500 sm:rounded-3xl sm:p-5",
         dying
           ? "bg-[#0a0608] text-[#ffe3e0] ring-2 ring-[#ff6b6b] [animation:simShake_0.5s_ease-in-out_infinite]"
           : "bg-[#06121f] text-[#dbeafe] ring-1 ring-white/10",
       )}
     >
-      <div className="mb-3.5 flex items-center justify-between">
+      <div className="mb-2 flex items-center justify-between sm:mb-3.5">
         <span className="flex items-center gap-2">
           <span className="relative flex size-2">
             <span
@@ -74,7 +74,7 @@ export function Monitor({
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-2 gap-1.5 sm:gap-2.5">
         {KEYS.map((key) => (
           <VitalTile
             key={key}
@@ -89,15 +89,15 @@ export function Monitor({
       </div>
 
       {dying ? (
-        <div className="mt-3 flex items-center gap-2 rounded-xl bg-[#ff6b6b] px-3 py-2.5">
-          <HeartCrack className="size-5 shrink-0 animate-pulse text-white" />
-          <span className="font-heading text-sm font-extrabold tracking-wide text-white uppercase">
+        <div className="mt-2 flex items-center gap-2 rounded-xl bg-[#ff6b6b] px-3 py-1.5 sm:mt-3 sm:py-2.5">
+          <HeartCrack className="size-4 shrink-0 animate-pulse text-white sm:size-5" />
+          <span className="font-heading text-[13px] font-extrabold tracking-wide text-white uppercase sm:text-sm">
             {t("dying")}
           </span>
         </div>
       ) : (
         criticalVital && (
-          <div className="mt-3 flex animate-pulse items-center gap-2 rounded-xl bg-[#ff9d6b]/20 px-3 py-2 ring-1 ring-[#ff9d6b]/50">
+          <div className="mt-2 flex animate-pulse items-center gap-2 rounded-xl bg-[#ff9d6b]/20 px-3 py-1.5 ring-1 ring-[#ff9d6b]/50 sm:mt-3 sm:py-2">
             <Siren className="size-4 text-[#ffbe94]" />
             <span className="font-mono text-[11px] tracking-[0.08em] text-[#ffbe94] uppercase">
               {t("outOfRange", { vital: RANGES[criticalVital].label })}

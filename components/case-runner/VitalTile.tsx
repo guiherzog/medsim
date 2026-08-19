@@ -31,7 +31,7 @@ function TrendIcon({ trend, severity }: { trend: Trend; severity: Severity }) {
   return (
     <Icon
       className={cn(
-        "size-3.5",
+        "size-3 shrink-0",
         trend === "flat" ? "text-white/25" : severity === "normal" ? "text-mint" : "text-current",
         trend !== "flat" && "animate-pulse",
       )}
@@ -39,6 +39,12 @@ function TrendIcon({ trend, severity }: { trend: Trend; severity: Severity }) {
   );
 }
 
+/**
+ * Two rows, not three: the band and delta sit beside the label so the big value
+ * shares a line with the severity chip. That keeps every piece of information
+ * the readings need to be legible while costing ~16px less height per tile —
+ * which matters on a phone, where the monitor was crowding out the activity log.
+ */
 export function VitalTile({
   vitalKey,
   value,
@@ -62,37 +68,37 @@ export function VitalTile({
   return (
     <div
       className={cn(
-        "flex flex-col gap-1 rounded-2xl px-3.5 py-2.5 transition-colors duration-500",
+        "flex flex-col gap-0.5 rounded-xl px-2.5 py-1.5 transition-colors duration-500 sm:rounded-2xl sm:px-3 sm:py-2",
         s.tile,
         isFocus && severity === "critical" && "animate-pulse",
       )}
     >
-      <div className="flex items-center justify-between gap-1">
+      <div className="flex items-center gap-1">
         <span className="font-mono text-[10px] tracking-[0.1em] text-[#8fb4d6]">{range.label}</span>
         <TrendIcon trend={trend} severity={severity} />
+        <span className="ml-auto truncate font-mono text-[9px] text-[#8fb4d6]/60">
+          {delta ? `${delta} · ` : ""}
+          {range.normal}
+        </span>
       </div>
 
-      <div className="flex items-baseline gap-1">
+      <div className="flex items-baseline gap-1.5">
         <span
-          className={cn("font-heading text-[26px] font-extrabold leading-none tabular-nums", s.value)}
+          className={cn(
+            "font-heading text-[21px] leading-none font-extrabold tabular-nums sm:text-[24px]",
+            s.value,
+          )}
         >
           {value}
         </span>
-        <span className="text-[10px] text-[#8fb4d6]/70">{range.unit}</span>
-      </div>
-
-      <div className="flex items-center justify-between gap-1">
+        <span className="text-[9px] text-[#8fb4d6]/70">{range.unit}</span>
         <span
           className={cn(
-            "rounded px-1 py-px font-mono text-[9px] tracking-[0.08em] uppercase",
+            "ml-auto shrink-0 rounded px-1 py-px font-mono text-[9px] tracking-[0.06em] uppercase",
             s.chip,
           )}
         >
           {t(severity)}
-        </span>
-        <span className="font-mono text-[9px] text-[#8fb4d6]/60">
-          {delta ? `${delta} · ` : ""}
-          {range.normal}
         </span>
       </div>
     </div>

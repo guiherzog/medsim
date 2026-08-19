@@ -31,7 +31,7 @@ export default async function CaseRunPage({
   return (
     <>
       <AppHeader />
-      <main className="px-6 pb-6">
+      <main className="px-4 pb-3 sm:px-6 sm:pb-6">
         <CaseRunner caseSpec={caseRow.caseSpec} attemptId={attemptId} caseSlug={slug} />
       </main>
     </>

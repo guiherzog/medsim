@@ -54,7 +54,7 @@ export function CaseRunner({
   const decisionsTaken = log.filter((l) => l.kind === "decision" || l.kind === "timeout").length;
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-84px)] w-full max-w-[560px] flex-col gap-3">
+    <div className="mx-auto flex h-[calc(100dvh-76px)] w-full max-w-[560px] flex-col gap-2 sm:gap-3">
       <style>{`
         @keyframes simShake {
           0%,100% { transform: translate(0,0) }
@@ -91,7 +91,7 @@ export function CaseRunner({
 
       <div
         className={cn(
-          "min-h-0 flex-1 overflow-y-auto rounded-2xl bg-card/60 p-3 ring-1 ring-border transition-opacity duration-500",
+          "min-h-0 flex-1 overflow-y-auto rounded-2xl bg-card/60 p-2 ring-1 ring-border transition-opacity duration-500 sm:p-3",
           dying && "opacity-45",
         )}
       >
@@ -123,9 +123,9 @@ export function CaseRunner({
           </p>
         )}
         {awaitingDecision ? (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between gap-2 px-1">
-              <p className="font-heading text-[15px] font-bold">{step.prompt}</p>
+              <p className="font-heading text-sm leading-snug font-bold sm:text-[15px]">{step.prompt}</p>
               <span
                 className={cn(
                   "shrink-0 rounded-md px-2 py-0.5 font-mono text-sm tabular-nums",
@@ -153,9 +153,9 @@ export function CaseRunner({
                 key={option.id}
                 type="button"
                 onClick={() => choose(option)}
-                className="flex items-center gap-2.5 rounded-[13px] border-[1.5px] border-[rgba(20,58,107,0.14)] bg-card px-4 py-3 text-left text-[15px] transition-colors hover:border-sky hover:bg-[#eef4ff]"
+                className="flex items-center gap-2 rounded-xl border border-[rgba(20,58,107,0.16)] bg-card px-3 py-2 text-left text-[13.5px] leading-snug transition-colors hover:border-sky hover:bg-[#eef4ff] sm:gap-2.5 sm:px-4 sm:py-2.5 sm:text-[15px]"
               >
-                <ChevronRight className="size-4 shrink-0 text-primary" />
+                <ChevronRight className="size-3.5 shrink-0 text-primary sm:size-4" />
                 {option.label}
               </button>
             ))}
