@@ -13,6 +13,10 @@
       "evolves": "Paciente virtual que evolui em tempo real",
       "feedback": "Feedback técnico ao final de cada evolução",
       "tracks": "Trilhas de urgência e residência"
+    },
+    "references": {
+      "eyebrow": "Base científica",
+      "title": "Casos construídos sobre condutas de referência"
     }
   },
   "status": {

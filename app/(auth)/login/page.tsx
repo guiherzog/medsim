@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { AppShell } from "@/components/layout/AppShell";
 import { DeepPanel } from "@/components/layout/DeepPanel";
 import { IconTile } from "@/components/layout/IconTile";
+import { ProtocolReferences } from "@/components/layout/ProtocolReferences";
 import { signInWithGoogle } from "./actions";
 import { isDevLoginAllowed } from "@/lib/auth/devLogin";
 import { DevLoginButton } from "@/components/layout/DevLoginButton";
@@ -43,6 +44,8 @@ export default async function LoginPage({
             </li>
           ))}
         </ul>
+
+        <ProtocolReferences />
 
         {error && (
           <p className="text-sm text-destructive" role="alert">

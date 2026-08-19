@@ -2,7 +2,6 @@ import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { AppShell } from "@/components/layout/AppShell";
-import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
 import { EvolutionNarrative } from "@/components/case-runner/EvolutionNarrative";
 import { VitalsPanel } from "@/components/case-runner/VitalsPanel";
 import { EvolutionRunner } from "@/components/case-runner/EvolutionRunner";
@@ -43,7 +42,6 @@ export default async function CaseRunPage({
       <AppHeader />
       <main>
         <AppShell>
-        <DisclaimerBanner disclaimer={caseRow.disclaimer} />
         <p className="text-sm text-muted-foreground">
           {t("progress", { current: evolutionIndex + 1, total: caseRow.caseSpec.evolutions.length })}
         </p>

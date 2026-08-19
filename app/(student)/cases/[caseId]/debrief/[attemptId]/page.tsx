@@ -3,7 +3,6 @@ import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { AppShell } from "@/components/layout/AppShell";
-import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
 import { buttonVariants } from "@/components/ui/button";
 import { ScoreSummary } from "@/components/debrief/ScoreSummary";
 import { EvolutionBreakdown } from "@/components/debrief/EvolutionBreakdown";
@@ -46,7 +45,6 @@ export default async function DebriefPage({
       <AppHeader />
       <main>
         <AppShell>
-          <DisclaimerBanner disclaimer={caseRow.disclaimer} />
           <ScoreSummary score={attempt.finalScore ?? 0} maxScore={attempt.maxPossibleScore ?? 0} />
 
           {/* The mocks pair the score with two callouts: what went well, and the

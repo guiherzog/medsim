@@ -21,7 +21,9 @@ The three cases (to be authored into YAML in Phase 1 by fleshing out the summari
 2. **`anafilaxia-amoxicilina`** — Alergia/Emergência. 24F, anafilaxia após amoxicilina → 2.A via aérea/estridor → 2.B reação bifásica → 2.C choque refratário em uso de propranolol.
 3. **`sepse-urinaria-idoso`** — Emergência/UTI. 72M, sepse de foco urinário → 3.A choque refratário a volume → 3.B SDRA → 3.C melhora/desmame.
 
-Each carries the source's mandatory **AVISO** disclaimer ("Material didático baseado em condutas de referência ACLS/AHA, WAO/EAACI, Surviving Sepsis Campaign... deve ser revisado por preceptor responsável e confrontado com os protocolos institucionais vigentes antes da aplicação") — shown as a persistent banner in the case UI, not just doc metadata.
+Each carries the source's **AVISO** disclaimer ("Material didático baseado em condutas de referência ACLS/AHA, WAO/EAACI, Surviving Sepsis Campaign... deve ser revisado por preceptor responsável e confrontado com os protocolos institucionais vigentes antes da aplicação") in its YAML and in `cases.disclaimer`.
+
+**Revised (superseding the earlier "persistent banner on every case screen" decision):** the per-case banner is gone. Its credibility half — the reference protocols the cases are built on — is now a selling point on the home page (`ProtocolReferences`). The unreviewed-status half is carried by the case's `status`, surfaced as the "Em validação" badge on the case list. `cases.disclaimer` is still authored, stored and available, but is no longer rendered in the case-play UI.
 
 ## Case Schema (YAML)
 
@@ -219,6 +221,6 @@ Supabase project `medsim` (`sa-east-1`, org Herzog, ref `eirukxgswpzuppcstlzw`) 
 - Manual: complete Caso 1 end-to-end (1.A → 1.B → 1.C), deliberately picking the critical error once to confirm it's flagged in debrief; repeat for Casos 2 and 3.
 - Confirm `seed_cases.ts` sets `status: under_review` (not `reviewed`) for all 3 cases, since none have real `approval.approvedBy`/`approvedAt`.
 - Confirm the case list only shows `under_review`/`reviewed` cases and renders the correct status badge for each.
-- Confirm the AVISO disclaimer is visibly rendered on every case screen.
+- Confirm the home page shows the reference-protocol selling point, and that unreviewed cases are still badged "Em validação" on the case list.
 - Confirm "Sign in with Google" completes the OAuth round trip and lands on the authenticated shell.
 - Confirm the initial-conduct reveal button stays disabled until the timer elapses, and the free-text answer is saved to `case_attempts.initial_conduct_text`.

@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { AppShell } from "@/components/layout/AppShell";
-import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
 import { Eyebrow } from "@/components/layout/Eyebrow";
 import { CaseIntro } from "@/components/case-runner/CaseIntro";
 import { createClient } from "@/lib/db/client";
@@ -22,7 +21,6 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ cas
       <AppHeader />
       <main>
         <AppShell>
-          <DisclaimerBanner disclaimer={caseRow.disclaimer} />
           {/* The mocks lead a case briefing with a mono eyebrow, then the title. */}
           <div>
             <Eyebrow className="text-muted-foreground">{caseRow.category}</Eyebrow>

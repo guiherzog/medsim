@@ -20,7 +20,7 @@ components/
 │   ├── DeepPanel.tsx             # deep navy gradient surface w/ mint glow (hero, score panel)
 │   ├── IconTile.tsx              # rounded tinted icon square (tones: brand/mint/sky/violet/danger)
 │   ├── Eyebrow.tsx               # small uppercase mono label ("SINAIS VITAIS ATUALIZADOS")
-│   ├── DisclaimerBanner.tsx      # renders case.disclaimer via Alert; persistent per plan.md
+│   ├── ProtocolReferences.tsx    # home-page selling point: the reference protocols behind the cases
 │   └── StatusBadge.tsx           # case.status -> label + color (under_review/reviewed/draft/disabled)
 ├── case-runner/   # feature components for the case-play flow, composed from ui/
 │   ├── CaseCard.tsx              # one card on the case-list screen (Card + StatusBadge + category Badge)
@@ -78,7 +78,7 @@ Taken from the MedSim design mocks (the "MedSim AI data briefing" artifact), def
 | `--mint` / `--sky` / `--violet` | `#38e2c5` / `#4aa3ff` / `#8b7bff` | gradients, icon tiles, score ring |
 | `--deep` + `--deep-foreground` | `#0d1f45` on `#eaf1fb` | deep navy display surfaces |
 | `--deep-muted` | `#8fb4d6` | secondary text on deep surfaces |
-| `--destructive` | `#d1483c` | incorrect option, critical-error flag, disclaimer |
+| `--destructive` | `#d1483c` | incorrect option, critical-error flag |
 
 **Radii** — the mocks are generous: `--radius: 1rem`, with `rounded-3xl` heroes, `rounded-2xl` cards/CTAs, `9px`/`13px` icon tiles.
 
