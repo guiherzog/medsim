@@ -40,7 +40,7 @@ export default async function CaseRunPage({
   return (
     <>
       <AppHeader />
-      <main className="mx-auto flex max-w-2xl flex-col gap-6 p-6">
+      <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
         <DisclaimerBanner disclaimer={caseRow.disclaimer} />
         <p className="text-sm text-muted-foreground">
           {t("progress", { current: evolutionIndex + 1, total: caseRow.caseSpec.evolutions.length })}

@@ -14,7 +14,7 @@ export default async function CasesPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto max-w-3xl p-6">
+      <main className="mx-auto w-full max-w-3xl p-6">
         <h1 className="mb-4 text-2xl font-semibold">{t("title")}</h1>
         {cases.length === 0 ? (
           <p className="text-muted-foreground">{t("empty")}</p>

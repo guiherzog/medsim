@@ -18,7 +18,7 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ cas
   return (
     <>
       <AppHeader />
-      <main className="mx-auto flex max-w-2xl flex-col gap-6 p-6">
+      <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
         <DisclaimerBanner disclaimer={caseRow.disclaimer} />
         <h1 className="text-2xl font-semibold">{caseRow.title}</h1>
         <CaseIntro slug={caseRow.slug} baseCase={caseRow.caseSpec.baseCase} vitalsTitle={t("vitalsTitle")} />
