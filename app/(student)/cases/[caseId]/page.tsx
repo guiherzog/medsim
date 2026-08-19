@@ -3,6 +3,7 @@ import { AppHeader } from "@/components/layout/AppHeader";
 import { AppShell } from "@/components/layout/AppShell";
 import { Eyebrow } from "@/components/layout/Eyebrow";
 import { StatusBadge } from "@/components/layout/StatusBadge";
+import { SpecialtyMark } from "@/components/illustrations/SpecialtyMark";
 import { CaseIntro } from "@/components/case-runner/CaseIntro";
 import { createClient } from "@/lib/db/client";
 import { getPlayableCaseBySlug } from "@/lib/db/queries/cases";
@@ -25,7 +26,10 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ cas
               <Eyebrow className="text-muted-foreground">{caseRow.category}</Eyebrow>
               <StatusBadge status={caseRow.status} />
             </div>
-            <h1 className="mt-3 text-[28px] leading-[1.06]">{caseRow.title}</h1>
+            <div className="mt-3 flex items-start gap-3">
+              <SpecialtyMark category={caseRow.category} />
+              <h1 className="text-[28px] leading-[1.06]">{caseRow.title}</h1>
+            </div>
           </div>
           <CaseIntro
             slug={caseRow.slug}

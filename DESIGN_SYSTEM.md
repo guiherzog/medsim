@@ -22,6 +22,9 @@ components/
 │   ├── Eyebrow.tsx               # small uppercase mono label ("SINAIS VITAIS ATUALIZADOS")
 │   ├── ProtocolReferences.tsx    # home-page selling point: the reference protocols behind the cases
 │   └── StatusBadge.tsx           # case.status -> label + color (under_review/reviewed/draft/disabled)
+├── illustrations/ # duotone inline SVG — no image assets ship with the app
+│   ├── SpecialtyMark.tsx         # one mark per specialty (heart/airway/infusion) + fallback
+│   └── SpotArt.tsx               # EmptyCasesArt, StabilisedArt, CompromisedArt
 ├── case-runner/   # feature components for the case-play flow, composed from ui/
 │   ├── CaseCard.tsx              # one card on the case-list screen; `featured` = larger first card
 │   ├── CaseIntro.tsx             # the briefing: patient card, admission vitals, "Assumir o caso"
@@ -104,3 +107,32 @@ Where the mocks describe behaviour this app deliberately doesn't have — a real
 2. Does `components/case-runner/` or `components/debrief/` already have this composed shape? Reuse/extend it, don't fork a near-duplicate.
 3. Is the text hardcoded anywhere in this component? Move it to `messages/pt-BR.json` + `useTranslations()`.
 4. Is case content (narrative/options/rationale) passed as a prop, or typed directly into JSX? It must be a prop — the component renders any `CaseSpec`, not one specific case.
+
+## Illustrations
+
+Duotone **inline SVG** only — the app ships no image binaries, and inline art is
+the only kind that recolours with the theme and survives the Artifact CSP. Each
+piece is a filled body shape plus one accent detail, drawn from the brand
+palette (mint / sky / violet, with amber and red for alarm states).
+
+| Piece | Where | Reads as |
+|---|---|---|
+| `SpecialtyMark` | case cards, case briefing | heart + ECG (Cardiologia), pinched airway + swelling (Alergia), infusion bag (Emergência/UTI) |
+| `EmptyCasesArt` | empty case list | stacked case cards with a flat trace |
+| `StabilisedArt` | debrief, good outcome | mint shield holding a steady rhythm |
+| `CompromisedArt` | debrief, bad outcome | red circle with the trace cut by a flatline |
+
+Two rules learned building these:
+
+- **Match specialties on a normalised substring, with a fallback.** Categories
+  come from case YAML, so a new one must never render blank. Order matters —
+  "Alergia/Emergência" also contains "emerg", so the allergy rule is checked
+  first.
+- **Draw for the smallest size it will appear at.** The first pass put a thin ECG
+  trace inside the heart; at 28px on a case card it vanished. Details are now
+  thick enough to survive, and the airway is a plain tube with a swollen waist
+  rather than an anatomical drawing.
+
+Spot art earns its space or it goes: the outcome art was first bled behind the
+debrief score at 25% opacity and read as a smudge, so it now leads the screen at
+full strength instead.

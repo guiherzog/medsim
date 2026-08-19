@@ -3,6 +3,7 @@ import { AppHeader } from "@/components/layout/AppHeader";
 import { AppShell } from "@/components/layout/AppShell";
 import { Eyebrow } from "@/components/layout/Eyebrow";
 import { CaseCard } from "@/components/case-runner/CaseCard";
+import { EmptyCasesArt } from "@/components/illustrations/SpotArt";
 import { createClient } from "@/lib/db/client";
 import { listPlayableCases, type CaseListItem } from "@/lib/db/queries/cases";
 import { requireUser } from "@/lib/auth/session";
@@ -43,7 +44,10 @@ export default async function CasesPage() {
           </header>
 
           {cases.length === 0 ? (
-            <p className="text-muted-foreground">{t("empty")}</p>
+            <div className="flex flex-col items-center gap-4 py-8 text-center">
+              <EmptyCasesArt className="max-w-[220px]" />
+              <p className="text-muted-foreground">{t("empty")}</p>
+            </div>
           ) : (
             groups.map(([category, items], groupIndex) => (
               <section key={category} className="flex flex-col gap-3">

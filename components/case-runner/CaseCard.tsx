@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronRight, Clock, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { StatusBadge } from "@/components/layout/StatusBadge";
+import { SpecialtyMark } from "@/components/illustrations/SpecialtyMark";
 import { cn } from "@/lib/utils";
 import type { CaseListItem } from "@/lib/db/queries/cases";
 
@@ -36,7 +37,9 @@ export function CaseCard({
           every card was pure noise. */}
       <StatusBadge status={caseItem.status} />
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex gap-3">
+        <SpecialtyMark category={caseItem.category} size={featured ? "md" : "sm"} />
+        <div className="flex min-w-0 flex-col gap-1.5">
         <h3
           className={cn(
             "font-heading leading-snug font-bold text-balance",
@@ -55,6 +58,7 @@ export function CaseCard({
             </span>
           </div>
         )}
+        </div>
       </div>
 
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-3">

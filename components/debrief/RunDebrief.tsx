@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { DeepPanel } from "@/components/layout/DeepPanel";
 import { Eyebrow } from "@/components/layout/Eyebrow";
 import { OutcomeCallout } from "./OutcomeCallout";
+import { CompromisedArt, StabilisedArt } from "@/components/illustrations/SpotArt";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { formatClock } from "@/lib/format";
@@ -42,6 +43,16 @@ export async function RunDebrief({
 
   return (
     <div className="flex flex-col gap-4">
+      {/* The outcome leads, at full strength — a 25%-opacity bleed behind the
+          score read as a smudge rather than as artwork. */}
+      <div className="flex justify-center pt-1">
+        {survived ? (
+          <StabilisedArt className="max-w-[132px]" />
+        ) : (
+          <CompromisedArt className="max-w-[132px]" />
+        )}
+      </div>
+
       <DeepPanel className="flex items-center gap-5">
         <div
           className="relative flex size-[104px] shrink-0 items-center justify-center rounded-full"
