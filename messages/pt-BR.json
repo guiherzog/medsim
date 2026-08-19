@@ -30,46 +30,56 @@
     "empty": "Nenhum caso disponível no momento."
   },
   "caseDetail": {
-    "vitalsTitle": "Sinais vitais",
-    "pa": "PA",
-    "fc": "FC",
-    "spo2": "SpO2",
-    "initialConductLabel": "Antes de ver a evolução, registre sua conduta inicial:",
-    "initialConductPlaceholder": "O que você faria agora?",
-    "revealButton": "Ver evolução",
-    "waitingButton": "Aguarde {seconds}s...",
+    "takeCase": "Assumir o caso",
     "admissionVitals": "Vitais na admissão",
-    "flowNote": "O caso evolui em 3 etapas fixas. Em cada uma você classifica as condutas e aponta a mais perigosa — a pontuação é imediata."
-  },
-  "evolution": {
-    "progress": "Evolução {current} de {total}",
-    "vitalsTitle": "Sinais vitais atualizados",
-    "optionsInstructions": "Para cada conduta abaixo, marque se ela é correta ou incorreta. Em seguida, indique qual seria a mais perigosa (erro crítico) se realizada.",
-    "correct": "Correta",
-    "incorrect": "Incorreta",
-    "mostDangerous": "Mais perigosa",
-    "submit": "Confirmar respostas",
-    "submitDisabledHint": "Classifique as 6 opções e marque a mais perigosa para confirmar.",
-    "scoreFeedback": "Você marcou {score} de {maxScore} pontos nesta evolução.",
-    "criticalIdentified": "Você identificou corretamente o erro crítico.",
-    "criticalMissed": "Você não identificou o erro crítico desta evolução.",
-    "next": "Próxima evolução",
-    "finish": "Ver resultado final"
+    "decisionsCount": "{count} decisões · cada uma com tempo limitado",
+    "starting": "Preparando o caso…",
+    "startError": "Não foi possível iniciar o caso. Tente novamente."
   },
   "debrief": {
-    "title": "Resultado final",
-    "score": "{score} de {maxScore} pontos",
-    "evolutionBreakdown": "Detalhamento por evolução",
-    "criticalMisses": "Erros críticos não identificados",
-    "noCriticalMisses": "Você identificou todos os erros críticos.",
-    "rationaleTitle": "Revisão das condutas",
-    "criticalOptionLabel": "erro crítico",
-    "misclassifiedLabel": "classificação incorreta",
-    "backToCases": "Voltar para os casos",
+    "title": "Debriefing do caso",
+    "stabilised": "Paciente estabilizado",
+    "compromised": "Desfecho comprometido",
+    "summary": "Conduzido em {time} · {correct} de {total} decisões corretas",
+    "points": "{score} de {maxScore} pontos",
     "whatWentWell": "O que foi bem",
-    "whatWentWellBody": "Você classificou corretamente {count} de {total} condutas ao longo do caso.",
+    "whatWentWellBody": "{correct} de {total} condutas alinhadas com a referência.",
+    "whatWentWellNone": "Nenhuma conduta alinhada com a referência neste caso.",
     "criticalFailure": "Ponto crítico de falha",
-    "criticalFailureBody": "Erro crítico não identificado em: {evolutions}.",
-    "allCriticalsFound": "Você identificou o erro crítico em todas as evoluções."
+    "criticalNone": "Nenhum erro crítico e nenhuma decisão perdida por tempo.",
+    "criticalErrors": "{count} erro(s) crítico(s) — decisões que pioraram diretamente o quadro.",
+    "timeouts": "{count} decisão(ões) perdida(s) por tempo — a demora também tem consequência.",
+    "clips": "Microvídeos para revisar",
+    "clipDuration": "3 min",
+    "howYouRan": "Como você conduziu",
+    "rationaleTitle": "Por que",
+    "retry": "Refazer o caso",
+    "backToCases": "Voltar para os casos"
+  },
+  "run": {
+    "live": "Ao vivo",
+    "unstable": "Paciente instável",
+    "dying": "O paciente está morrendo — aja agora",
+    "outOfRange": "{vital} fora da faixa — atenção",
+    "logTitle": "Registro da condução",
+    "decisions": "{count} decisões",
+    "evolving": "Paciente evoluindo…",
+    "waiting": "Aguarde a evolução",
+    "seconds": "{seconds}s",
+    "error": "Falha ao registrar a decisão. Verifique a conexão.",
+    "severity": {
+      "normal": "normal",
+      "warning": "alterado",
+      "critical": "crítico"
+    },
+    "kind": {
+      "event": "Evento",
+      "decision": "Sua conduta",
+      "outcome": "Resposta do paciente",
+      "vitals": "Vitais",
+      "alarm": "Alarme",
+      "timeout": "Tempo esgotado",
+      "clip": "Microvídeo"
+    }
   }
 }

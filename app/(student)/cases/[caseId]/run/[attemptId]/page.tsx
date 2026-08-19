@@ -1,14 +1,9 @@
 import { notFound, redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/layout/AppHeader";
-import { AppShell } from "@/components/layout/AppShell";
-import { EvolutionNarrative } from "@/components/case-runner/EvolutionNarrative";
-import { VitalsPanel } from "@/components/case-runner/VitalsPanel";
-import { EvolutionRunner } from "@/components/case-runner/EvolutionRunner";
+import { CaseRunner } from "@/components/case-runner/CaseRunner";
 import { createClient } from "@/lib/db/client";
 import { getCaseById } from "@/lib/db/queries/cases";
 import { getAttempt } from "@/lib/db/queries/attempts";
-import { shuffleOptions } from "@/lib/engine/shuffle";
 import { requireUser } from "@/lib/auth/session";
 
 export default async function CaseRunPage({
@@ -18,7 +13,6 @@ export default async function CaseRunPage({
 }) {
   const user = await requireUser();
   const { caseId: slug, attemptId } = await params;
-  const t = await getTranslations("evolution");
   const supabase = await createClient();
 
   const attempt = await getAttempt(supabase, attemptId);
@@ -31,30 +25,14 @@ export default async function CaseRunPage({
     redirect(`/cases/${slug}/debrief/${attemptId}`);
   }
 
-  const evolutionIndex = caseRow.caseSpec.evolutions.findIndex((e) => e.id === attempt.currentEvolutionId);
-  const evolution = caseRow.caseSpec.evolutions[evolutionIndex];
-  if (!evolution) notFound();
-
-  const options = shuffleOptions(evolution, attemptId).map((o) => ({ id: o.id, text: o.text }));
-
+  // The full spec (including each option's consequences) goes to the client so
+  // the monitor can react instantly — an accepted trade, see plan.md Phase 2.
+  // Scoring is still recomputed server-side on every decision.
   return (
     <>
       <AppHeader />
-      <main>
-        <AppShell>
-        <p className="text-sm text-muted-foreground">
-          {t("progress", { current: evolutionIndex + 1, total: caseRow.caseSpec.evolutions.length })}
-        </p>
-        <EvolutionNarrative narrative={evolution.narrative} />
-        <VitalsPanel vitals={evolution.vitals} title={t("vitalsTitle")} />
-        <EvolutionRunner
-          key={evolution.id}
-          attemptId={attemptId}
-          evolutionId={evolution.id}
-          caseSlug={slug}
-          options={options}
-        />
-        </AppShell>
+      <main className="px-6 pb-6">
+        <CaseRunner caseSpec={caseRow.caseSpec} attemptId={attemptId} caseSlug={slug} />
       </main>
     </>
   );

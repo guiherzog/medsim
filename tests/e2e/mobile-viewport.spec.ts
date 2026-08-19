@@ -14,7 +14,7 @@ test("case list and case intro are usable on a mobile viewport", async ({ page }
   expect(hasHorizontalScroll).toBe(false);
 
   await page.getByText("Dor torácica em homem de 58 anos").click();
-  await expect(page.getByRole("button", { name: /Aguarde|Ver evolução/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Assumir o caso" })).toBeVisible();
 
   const hasHorizontalScrollOnDetail = await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,

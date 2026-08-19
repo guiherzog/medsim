@@ -23,19 +23,15 @@ components/
 │   ├── ProtocolReferences.tsx    # home-page selling point: the reference protocols behind the cases
 │   └── StatusBadge.tsx           # case.status -> label + color (under_review/reviewed/draft/disabled)
 ├── case-runner/   # feature components for the case-play flow, composed from ui/
-│   ├── CaseCard.tsx              # one card on the case-list screen (Card + StatusBadge + category Badge)
-│   ├── PatientCard.tsx           # the mocks' briefing card: hatched avatar tile + presentation
-│   ├── VitalsPanel.tsx           # the mocks' deep-navy vitals block; null = "—", never carried forward (Q4)
-│   ├── InitialConductTimer.tsx   # hard-gated countdown; reveal disabled until 0 (Q8); textarea -> initial_conduct_text (Q3)
-│   ├── EvolutionNarrative.tsx    # narrative text block for one evolution
-│   ├── OptionRow.tsx             # one of the 6 options: correct/incorrect call + "most dangerous" pick, unrestricted (Q6)
-│   ├── OptionList.tsx            # composes 6 OptionRows + submit button
-│   └── EvolutionScoreFeedback.tsx # immediate per-evolution score after submit
+│   ├── CaseCard.tsx              # one card on the case-list screen
+│   ├── CaseIntro.tsx             # the briefing: patient card, admission vitals, "Assumir o caso"
+│   ├── CaseRunner.tsx            # the run screen: monitor + activity log + decisions (client)
+│   ├── Monitor.tsx               # bedside monitor; near-black + ring + shake when dying
+│   ├── VitalTile.tsx             # one reading: severity colour, chip, delta, reference band
+│   └── LogEntry.tsx              # one activity-log entry, styled per kind
 └── debrief/
-    ├── ScoreSummary.tsx          # the mocks' readiness ring (conic-gradient) on a DeepPanel
-    ├── OutcomeCallout.tsx        # the mocks' "O que foi bem" / "Ponto crítico de falha" callouts
-    ├── EvolutionBreakdown.tsx    # per-evolution score + critical-miss flag
-    └── RationaleReview.tsx       # all 6 options' rationale shown, correct/incorrect/critical marked (Q5)
+    ├── RunDebrief.tsx            # score ring, callouts, microvídeos, the run replayed w/ rationale
+    └── OutcomeCallout.tsx        # "O que foi bem" / "Ponto crítico de falha"
 ```
 
 ## Buttons
@@ -84,7 +80,11 @@ Taken from the MedSim design mocks (the "MedSim AI data briefing" artifact), def
 
 **Layout** — the mocks are mobile-first: one centred column capped at **520px**. Always use `AppShell`, never a bare `max-w-*` container.
 
-**Case-screen patterns** copied from the mocks: a briefing leads with a mono eyebrow (category) then a 28px display title; the patient presentation sits in `PatientCard`; vitals sit on the deep navy `VitalsPanel` with label-over-value stats; choices are soft-grey rows with a 1.5px border that turns `--sky` on hover (`OptionRow`); the debrief pairs the score ring with the two `OutcomeCallout`s.
+**Case-screen patterns** (Phase 2): a briefing leads with a mono eyebrow (category) + status badge, then a 28px display title, the patient in a hatched-avatar card and admission vitals on the deep navy panel. The run screen pins `Monitor` at the top, scrolls the activity log in the middle, and docks the decisions — each with a countdown that escalates grey → amber → pulsing red. The debrief pairs the score ring with the two `OutcomeCallout`s and replays the run with each decision's rationale.
+
+**Severity is a system, not a one-off.** `lib/engine/vitalStatus.ts` owns the reference bands; `VitalTile` renders `normal` / `warning` / `critical` with its own colour, chip, delta-from-admission and band. A patient state of `dying` escalates the whole screen (red ring, shake, banner, edge vignette, log dimmed) — but the monitor panel stays near-black, because tinting it red flattens the per-vital severity colours that make the readings legible.
+
+**Log entries are typed.** Each kind (`event`, `decision`, `outcome`, `vitals`, `alarm`, `timeout`, `clip`) gets its own icon, uppercase mono chip and treatment in `LogEntry`, so the log scans as a stream of different things happening.
 
 Where the mocks describe behaviour this app deliberately doesn't have — a real-time monitor whose vitals shift per decision, microvídeos, the paywall — the *visual* pattern is copied but the copy is rewritten to describe what actually happens. Never ship mock copy that misdescribes the app.
 

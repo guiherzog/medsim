@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { AppShell } from "@/components/layout/AppShell";
 import { Eyebrow } from "@/components/layout/Eyebrow";
+import { StatusBadge } from "@/components/layout/StatusBadge";
 import { CaseIntro } from "@/components/case-runner/CaseIntro";
 import { createClient } from "@/lib/db/client";
 import { getPlayableCaseBySlug } from "@/lib/db/queries/cases";
@@ -11,7 +11,6 @@ import { requireUser } from "@/lib/auth/session";
 export default async function CaseDetailPage({ params }: { params: Promise<{ caseId: string }> }) {
   await requireUser();
   const { caseId: slug } = await params;
-  const t = await getTranslations("caseDetail");
   const supabase = await createClient();
   const caseRow = await getPlayableCaseBySlug(supabase, slug);
   if (!caseRow) notFound();
@@ -21,15 +20,17 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ cas
       <AppHeader />
       <main>
         <AppShell>
-          {/* The mocks lead a case briefing with a mono eyebrow, then the title. */}
           <div>
-            <Eyebrow className="text-muted-foreground">{caseRow.category}</Eyebrow>
+            <div className="flex items-center gap-2">
+              <Eyebrow className="text-muted-foreground">{caseRow.category}</Eyebrow>
+              <StatusBadge status={caseRow.status} />
+            </div>
             <h1 className="mt-3 text-[28px] leading-[1.06]">{caseRow.title}</h1>
           </div>
           <CaseIntro
             slug={caseRow.slug}
-            baseCase={caseRow.caseSpec.baseCase}
-            admissionVitalsTitle={t("admissionVitals")}
+            briefing={caseRow.caseSpec.briefing}
+            stepCount={caseRow.caseSpec.steps.length}
           />
         </AppShell>
       </main>
